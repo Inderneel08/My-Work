@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define Knapsack_Capacity 50.00
+using namespace std;
+class Interval{
+public:
+    int value;
+    int weight;
+    Interval(int x,int y)
+    {
+        value=x;
+        weight=y;
+    }
+};
+bool comaprising_operator(Interval I1,Interval I2)
+{
+    double w1,w2;
+    w1=I1.value/I1.weight;
+    w2=I2.value/I2.weight;
+    return(w1>w2);
+}
+bool check_weight(double w1)
+{
+    if(w1<Knapsack_Capacity){
+        return(true);
+    }
+    return(false);
+}
+double add_weight(int weight)
+{
+    return(Knapsack_Capacity-weight);
+}
+int main()
+{
+                /// (Value,Weight).
+    Interval arr[]={{100,20},{120,30},{60,10}};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    sort(arr,arr+n,comaprising_operator);
+    double weight=0.00;
+    double value=0.00;
+    for(int i=0;i<n,weight<Knapsack_Capacity;i++){
+        if(weight<Knapsack_Capacity){
+            weight+=arr[i].weight;
+            value+=arr[i].value;
+            if(check_weight(weight)==false){
+                weight-=arr[i].weight;
+                value-=arr[i].value;
+                weight+=add_weight(arr[i].weight);
+                value+=(arr[i].value/arr[i].weight)*add_weight(arr[i].weight);
+            }
+        }
+    }
+    cout<<"Maximum possible value is:"<<value<<endl;
+}
