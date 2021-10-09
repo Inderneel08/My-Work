@@ -1,0 +1,50 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int find_largest(int*arr,int n)
+{
+    int biggest=arr[0];
+    for(int i=1;i<n;i++){
+        if(biggest<arr[i]){
+            biggest=arr[i];
+        }
+    }
+    return(biggest);
+}
+void counting_sort(int*arr,int n)
+{
+    int x=find_largest(arr,n);
+    int*output=new int[n];
+    int*count_array=new int[x+1];
+    for(int i=0;i<x+1;i++){
+        count_array[i]=0;
+    }
+    for(int i=0;i<n;i++){
+        count_array[arr[i]]++;
+    }
+    for(int i=1;i<x+1;i++){
+        count_array[i]=count_array[i-1]+count_array[i];
+    }
+    for(int i=n-1;i>=0;i--){
+        output[count_array[arr[i]]-1]=arr[i];
+        cout_array[arr[i]]--;
+    }
+    for(int i=0;i<n;i++){
+        arr[i]=output[i];
+    }
+}
+int main()
+{
+    int n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int*arr=new int[n];
+    for(int i=0;i<n;i++){
+        cin>>*(arr+i);
+    }
+    counting_sort(arr,n);
+    for(int i=0;i<n;i++){
+        cout<<*(arr+i)<<" ";
+    }
+}

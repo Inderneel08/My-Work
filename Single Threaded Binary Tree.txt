@@ -1,0 +1,205 @@
+///Single Threaded Binary Trees.
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct node{
+    int data;
+    struct node*left;
+    struct node*right;
+    bool isthreaded;
+    node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+        isthreaded=0;
+        ///isthreaded=0 when the right pointer either points to a new element that is inserted or when the right
+        /// pointer is empty and does not points to an element.
+        /// isthreaded =1 when the right pointer points to inorder successor.
+    }
+}*rootx;
+struct node*left_most_node(struct node*root)
+{
+    while(root->left!=NULL){
+        root=root->left;
+    }
+    return(root);
+}
+void traversal_tree(struct node*root)
+{
+    if(root==NULL){
+        exit(0);
+    }
+    node*temp=left_most_node(root);
+    while(temp->isthreaded==1){
+        cout<<temp->data<<" ";
+        temp=temp->right;
+    }
+    cout<<temp->data<<" ";
+    traversal_tree(temp->right);
+}
+void insert_node_tree(struct node*root,int element)
+{
+    if(rootx==NULL){
+        root=new node(element);
+        rootx=root;
+    }
+    else{
+        if((root->data)>element){
+            if(root->left==NULL){
+                root->left=new node(element);
+                root->left->right=root;
+                root->left->isthreaded=1;
+            }
+            else{
+                insert_node_tree(root->left,element);
+            }
+        }
+        else{
+            if(((root->data)<element)&&(root->right==NULL)){
+                root->right=new node(element);
+            }
+            else if((root->right!=NULL)&&(root->isthreaded==1)){
+                node*temp=new node(element);
+                temp->right=root->right;
+                root->isthreaded=0;
+                root->right=temp;
+                temp->isthreaded=1;
+            }
+            else{
+                insert_node_tree(root->right,element);
+            }
+        }
+    }
+}
+int main()
+{
+    int element;
+    char ch='y';
+    struct node*root=NULL;
+    while(ch=='y'){
+         cout<<"Enter the element that needs to be inserted inside the tree"<<endl;
+         cin>>element;
+         insert_node_tree(rootx,element);
+         cout<<"Do you want to insert another element inside the tree?"<<endl;
+         cin>>ch;
+    }
+    traversal_tree(rootx);
+}
+
+/// Array as an input.
+
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+class node{
+public:
+    int data;
+    node*left;
+    node*right;
+    bool is_right_pointer;
+    node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+        is_right_pointer=0;
+    }
+}*root;
+void inorder_traversal(node*temp)
+{
+    if(temp!=NULL){
+        while(temp->left!=NULL){
+            temp=temp->left;
+        }
+        if(temp->is_right_pointer==0){
+            cout<<temp->data<<" ";
+            inorder_traversal(temp->right);
+        }
+        else{
+            while(temp->is_right_pointer==1){
+                cout<<temp->data<<" ";
+                temp=temp->right;
+            }
+            cout<<temp->data<<" ";
+            inorder_traversal(temp->right);
+        }
+    }
+}
+void create_binary_tree(node*temp,int i,int n,int*arr)
+{
+    if(i<n){
+        if(i==0){
+            temp=new node(arr[i]);
+            i++;
+            root=temp;
+            create_binary_tree(root,i,n,arr);
+        }
+        else{
+            if((temp->data)<arr[i]){
+                if(temp->right==NULL){
+                    temp->right=new node(arr[i]);
+                    i++;
+                    create_binary_tree(root,i,n,arr);
+                }
+                else{
+                    if(temp->is_right_pointer==0){
+                        create_binary_tree(temp->right,i,n,arr);
+                    }
+                    else{
+                        node*t=new node(arr[i]);
+                        t->right=temp->right;
+                        temp->right=t;
+                        t->is_right_pointer=1;
+                        temp->is_right_pointer=0;
+                        i++;
+                        create_binary_tree(root,i,n,arr);
+                    }
+                }
+            }
+            else{
+                if(temp->left==NULL){
+                    temp->left=new node(arr[i]);
+                    temp->left->right=temp;
+                    temp->left->is_right_pointer=1;
+                    i++;
+                    create_binary_tree(root,i,n,arr);
+                }
+                else{
+                    create_binary_tree(temp->left,i,n,arr);
+                }
+            }
+        }
+    }
+}
+int main()
+{
+    int n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int*arr=new int[n];
+    cout<<"Enter the elements in the array:"<<endl;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    create_binary_tree(root,0,n,arr);
+    inorder_traversal(root);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

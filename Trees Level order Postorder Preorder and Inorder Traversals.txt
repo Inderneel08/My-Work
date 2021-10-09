@@ -1,0 +1,173 @@
+
+Tree Traversal and Tree movement
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<queue>
+using namespace std;
+struct node{
+    int data;
+    struct node*left;
+    struct node*right;
+    node(int x)
+    {
+        data=x;
+        left=NULL;
+        right=NULL;
+    }
+};
+node*build_tree(int arr[],struct node*root,int i,int n)
+{
+    struct node*temp=NULL;
+    if(i<n){
+        temp=new node(arr[i]);
+        root=temp;
+        root->left=build_tree(arr,root->left,2*i+1,n);
+        root->right=build_tree(arr,root->right,2*i+2,n);
+    }
+    return(root);
+}
+void inorder(struct node*root)
+{
+    if(root!=NULL){
+        inorder(root->left);
+        cout<<root->data<<" ";
+        inorder(root->right);
+    }
+}
+int find_height(struct node*root)
+{
+    int height1=0,height2=0;
+    if(root==NULL){
+        return(0);
+    }
+    else{
+        if(root->left==NULL&&root->right==NULL){
+            return(1);
+        }
+        else{
+            height1=height1+find_height(root->left);
+            height2=height2+find_height(root->right);
+            return(max(height1,height2)+1);
+        }
+    }
+}
+int find_numberof_nodes(struct node*root)
+{
+    static int number=0;
+    if(root!=NULL){
+        number++;
+        find_numberof_nodes(root->left);
+        find_numberof_nodes(root->right);
+    }
+    return(number);
+}
+int main()
+{
+    struct node*root=NULL;
+    int n;
+    cout<<"Size of the array:"<<endl;
+    cin>>n;
+    int arr[n];
+    cout<<"Enter the numbers to be inserted:"<<endl;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    root=build_tree(arr,root,0,n);
+    inorder(root);
+    cout<<"The height of the tree is :"<<endl;
+    cout<<find_height(root)<<endl;
+    cout<<"Total Number of Nodes:"<<endl;
+    cout<<find_numberof_nodes(root)<<endl;
+    level_order(root);
+    level_order1(root);
+    preorder1(root);
+    inorder_non_recursive(root);   
+}
+void level_order(struct node*root)
+{
+    queue<node*>x;
+    if(root!=NULL){
+        x.push(root);
+        while(!x.empty()){
+            node*temp=x.front();
+            cout<<x.front()->data<<" ";
+            x.pop();
+            if(temp->left!=NULL){
+                x.push(temp->left);
+            }
+            if(temp->right!=NULL){
+                x.push(temp->right);
+            }
+        }
+    }
+}
+void level_order1(struct node*root)
+{
+    static queue<node*>x;
+    if(root!=NULL){
+        node*temp;
+        cout<<root->data<<" ";
+        if(root->left!=NULL){
+            x.push(root->left);
+        }
+        if(root->right!=NULL){
+            x.push(root->right);
+        }
+        temp=x.front();
+        x.pop();
+        level_order1(temp);
+    }
+}
+void preorder1(struct node*root)
+{
+    static stack<node*>x;
+    x.push(root);
+    while(!x.empty()){
+        node*temp=x.top();
+        cout<<temp->data<<" ";
+        x.pop();
+        if(temp->right!=NULL){
+            x.push(temp->right);
+        }
+        if(temp->left!=NULL){
+            x.push(temp->left);
+        }
+    }
+}
+void inorder_non_recursive(struct node*root)
+{
+    static stack<node*>x;
+    struct node*temp=root;
+    while(temp!=NULL || !x.empty()){
+        while(temp!=NULL){
+            x.push(temp);
+            temp=temp->left;
+        }
+        cout<<x.top()->data<<" ";
+        temp=x.top();
+        x.pop();
+        temp=temp->right;
+    }
+}
+void postorder_non_recursive(struct node*root)
+{
+    stack<node*>s1,s2;
+    s1.push(root);
+    while(!s1.empty()){
+        s2.push(s1.top());
+        s1.pop();
+        if(s2.top()->left!=NULL){
+            s1.push(s2.top()->left);
+        }
+        if(s2.top()->right!=NULL){
+            s1.push(s2.top()->right);
+        }
+    }
+    while(!s2.empty()){
+        cout<<s2.top()->data<<" ";
+        s2.pop();
+    }
+}
+

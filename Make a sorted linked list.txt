@@ -1,0 +1,74 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct node{
+  int data;
+  struct node*next;
+}*head,*tail;
+void sorted_insertion(void)
+{
+    struct node*s;
+    s=(struct node*)malloc(sizeof(struct node));
+    int element;
+    cout<<"Enter the element that needs to be inserted:"<<endl;
+    cin>>element;
+    s->data=element;
+    s->next=NULL;
+    if(head==NULL){
+        head=s;
+        tail=s;
+    }
+    else if((head->data)>(s->data)){
+        s->next=head;
+        head=s;
+    }
+    else{
+        int counter_;
+        if((tail->next==NULL)&&((s->data)>(tail->data))){
+            counter_=1;
+            goto counter;
+        }
+        while((tail->next->data)<(s->data)){
+            tail=tail->next;
+            counter_=0;
+        }
+        if(counter_==0){
+            s->next=tail;
+            tail->next=s;
+        }
+        counter:
+            tail->next=s;
+            tail=s;
+    }
+}
+void print_sorted_list(void)
+{
+    node*temp;
+    temp=head;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+}
+int main()
+{
+    int i;
+    cout<<"Choose the options from the below:"<<endl;
+    cin>>i;
+    while(i==1||i==2){
+        switch(i)
+        {
+            case 1:
+            sorted_insertion();
+            break;
+            case 2:
+            print_sorted_list();
+            break;
+        }
+        fflush(stdin);
+        cout<<endl;
+        cout<<"Choose again:"<<endl;
+        cin>>i;
+    }
+}

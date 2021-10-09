@@ -1,0 +1,69 @@
+/// Coin change problem using recursion.
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define sum 4
+using namespace std;
+int count_solutions(int coins[],int m,int n)
+{
+    if(n==0){
+        return(1);
+    }
+    if(n<0){
+        return(0);
+    }
+    if(m<=0&&n>=1){
+        return(0);
+    }
+    /// Solution that contains m th coin and solution that does not contain m th coin.
+    return(count_solutions(coins,m,n-coins[m-1])+count_solutions(coins,m-1,n));
+}
+int main()
+{
+            ///  0 1 2
+    int coins[]={1,2,3};
+    cout<<count_solutions(coins,sizeof(coins)/sizeof(coins[0]),sum);
+}
+
+
+/// Coin change Problem Dynamic Programming.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define W 15
+using namespace std;
+int main()
+{
+    int coins[4]={2,3,5,10};
+    int n=sizeof(coins)/sizeof(coins[0]);
+    int coins_table[n][W+1];
+    for(int i=0;i<n;i++){
+        coins_table[i][0]=1;
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<W+1;j++){
+            if(i==0){
+                if(j!=0){
+                    if(j%coins[i]==0){
+                        coins_table[i][j]=1;
+                    }
+                    else{
+                        coins_table[i][j]=0;
+                    }
+                }
+            }
+            else{
+                if(j!=0){
+                    if(j<coins[i]){
+                        coins_table[i][j]=coins_table[i-1][j];
+                    }
+                    else{
+                        coins_table[i][j]=coins_table[i-1][j]+coins_table[i][j-coins[i]];
+                    }
+                }
+            }
+        }
+    }
+    cout<<"Total Number of ways:"<<coins_table[n-1][W];
+}

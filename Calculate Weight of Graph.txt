@@ -1,0 +1,55 @@
+/// Calculate Weight of a graph.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define V 5
+using namespace std;
+bool ispresent_in_graph(vector<int>&vmc,int index)
+{
+    for(int i=0;i<vmc.size();i++){
+        if(vmc[i]==index){
+            return(false);
+        }
+    }
+    return(true);
+}
+int calculate_weight_graph(int graph[V][V])
+{
+    int weight=0;
+    for(int i=0;i<V;i++){
+        for(int j=0;j<V;j++){
+            if(graph[i][j]!=0){
+                weight+=graph[i][j];
+                graph[i][j]=0;
+                graph[j][i]=0;
+            }
+        }
+    }
+    return(weight);
+}
+void create_edge(int source,int destination,int distance,int graph[V][V])
+{
+    graph[source][destination]=distance;
+    graph[destination][source]=distance;
+}
+int main()
+{
+    int graph[V][V];
+    /// 0-> a
+    /// 1-> b
+    /// 2-> c
+    /// 3-> d
+    /// 4-> e
+    for(int i=0;i<V;i++){
+        for(int j=0;j<V;j++){
+            graph[i][j]=0;
+        }
+    }
+    create_edge(0,2,10,graph);
+    create_edge(0,3,7,graph);
+    create_edge(3,1,32,graph);
+    create_edge(2,3,9,graph);
+    create_edge(3,4,23,graph);
+    int weight=calculate_weight_graph(graph);
+    cout<<"Weight:->"<<weight<<endl;
+}

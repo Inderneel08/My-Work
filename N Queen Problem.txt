@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int n=20;
+void print_solution(int**arr)
+{
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<arr[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+bool check_condition(int**arr,int row,int col)
+{
+    int i,j;
+    for(i=0;i<col;i++){
+        if(arr[row][i]){
+            return(false);
+        }
+    }
+    for(i=row,j=col;i>=0&&j>=0;i--,j--){
+        if(arr[i][j]){
+            return(false);
+        }
+    }
+    for(i=row,j=col;i<n&&j>=0;i++,j--){
+        if(arr[i][j]){
+            return(false);
+        }
+    }
+    return(true);
+}
+bool solve_N_queen(int**arr,int col)
+{
+    if(col>=n){
+        return(true);
+    }
+    else{
+        for(int i=0;i<n;i++){
+            if(check_condition(arr,i,col)){
+                arr[i][col]=1;
+                if(solve_N_queen(arr,col+1)){
+                    return(true);
+                }
+                ///Backtrack.
+                arr[i][col]=0;
+            }
+        }
+        return(false);
+    }
+}
+int main()
+{
+    int**Nqueen=new int*[n];
+    for(int i=0;i<n;i++){
+        Nqueen[i]=new int[n];
+    }
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            Nqueen[i][j]=0;
+        }
+    }
+    if(solve_N_queen(Nqueen,0)){
+        print_solution(Nqueen);
+    }
+    else{
+        cout<<"Solution does not exist"<<endl;
+    }
+}

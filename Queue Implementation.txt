@@ -1,0 +1,93 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#define maxsize 10
+using namespace std;
+int S[maxsize];
+int frnt=-1;
+int rear=-1;
+void enqueue(int x[],int size_)
+{
+    int number;
+    cout<<"Enter the number to be inserted:"<<endl;
+    if(frnt=-1&&rear==-1){
+        frnt=0;
+        rear=0;
+        cin>>number;
+        x[rear]=number;
+    }
+    else if(rear<size_-1){
+        cin>>number;
+        rear++;
+        x[rear]=number;
+    }
+    else if(rear==size_-1){
+        cout<<"Overflow reached"<<endl;
+    }
+}
+void deque_(int x[])
+{
+    if(frnt<=rear){
+        cout<<x[frnt];
+        frnt++;
+    }
+    else if((frnt==-1)||(frnt=rear+1)){
+        cout<<"Queue is empty"<<endl;
+    }
+}
+void size_queue(int x[])
+{
+    if(frnt==-1&&rear==-1){
+        cout<<"0"<<endl;
+    }
+    else{
+        cout<<rear-frnt+1<<endl;
+    }
+}
+void isempty(int x[])
+{
+    if((frnt==-1&&rear==-1)||(frnt>rear)){
+        cout<<"0"<<endl;
+    }
+    else if(rear>=frnt){
+        cout<<"1"<<endl;
+    }
+}
+void frnt_print(int x[])
+{
+    if(rear>=frnt){
+        cout<<x[rear];
+    }
+    else if((frnt==-1&&rear==-1)||(frnt>rear)){
+        cout<<"Queue empty"<<endl;
+    }
+}
+int main()
+{
+    int i;
+    cout<<"Enter the option:"<<endl;
+    cin>>i;
+    while(i==1||i==2||i==3||i==4||i==5){
+        switch(i)
+        {
+        case 1:
+            enqueue(S,maxsize);
+            break;
+        case 2:
+            deque_(S);
+            break;
+        case 3:
+            size_queue(S);
+            break;
+        case 4:
+            isempty(S);
+            break;
+        case 5:
+            frnt_print(S);
+            break;
+        }
+        fflush(stdin);
+        cout<<"\nChoose again:"<<endl;
+        cin>>i;
+    }
+}}

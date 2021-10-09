@@ -1,0 +1,36 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#define max_temp 10
+using namespace std;
+int*linear_probing=new int[max_temp];
+void find_index(int element)
+{
+    int x=element%max_temp;
+    if(linear_probing[x]==0){
+        linear_probing[x]=element;
+    }
+    else{
+        for(int i=1;i<max_temp;i++){
+            x=(((element%max_temp)+i)%max_temp);
+            if(linear_probing[x]==0){
+                linear_probing[x]=element;
+                break;
+            }
+        }
+    }
+}
+int main()
+{
+    int element;
+    for(int i=0;i<max_temp;i++){
+        linear_probing[i]=0;
+    }
+    for(int i=0;i<max_temp;i++){
+        cin>>element;
+        find_index(element);
+    }
+    for(int i=0;i<max_temp;i++){
+        cout<<linear_probing[i]<<" ";
+    }
+}

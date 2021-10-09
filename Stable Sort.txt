@@ -1,0 +1,2 @@
+It is a type of sorting technique that does not change the orders of the duplicates in the sorting array.
+Merge sort is a form of stable sort.

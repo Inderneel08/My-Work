@@ -1,0 +1,165 @@
+/// Brute force approach iterative approach.
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define Knapsack_Capacity 50
+using namespace std;
+class Interval{
+public:
+    int value;
+    int weight;
+};
+void put_in_knapsack(pair<int,int>&knapsack,Interval a[],int n)
+{
+    int w=0;
+    int v=0;
+    int x=0;
+    int value=0;
+    for(int i=-1;i<n-1;i++){
+        for(int j=i+1;j<n;j++){
+            if(w<Knapsack_Capacity){
+                w+=a[j].weight;
+                v+=a[j].value;
+                x=0;
+            }
+            if(w==Knapsack_Capacity){
+                value=max(value,v);
+                x=-1;
+                break;
+            }
+            if(w>Knapsack_Capacity){
+                w-=a[j].weight;
+                v-=a[j].value;
+                value=max(value,v);
+                x=-1;
+                break;
+            }
+        }
+        if(x==-1){
+            knapsack.first=w;
+            knapsack.second=value;
+            w=0;
+            v=0;
+        }
+    }
+}
+int main()
+{
+    int value[]={60,100,120};
+    int weight[]={10,20,30};
+    int n=sizeof(value)/sizeof(value[0]);
+    Interval arr[n];
+    for(int i=0;i<n;i++){
+        arr[i].value=value[i];
+        arr[i].weight=weight[i];
+    }
+    pair<int,int> knapsack;
+    put_in_knapsack(knapsack,arr,n);
+    cout<<"Weight:"<<knapsack.first<<" "<<"Value:"<<knapsack.second<<endl;
+}
+
+/// Recursive approach.
+
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define Knapsack_Capacity 50
+using namespace std;
+int knapsack(int value[],int weight[],int n,int w)
+{
+    if(n==0||w==0){
+        return(0);
+    }
+    if(weight[n-1]>w){
+        return(knapsack(value,weight,n-1,w));
+    }
+    else{
+        return(max(value[n-1]+knapsack(value,weight,n-1,w-weight[n-1]),knapsack(value,weight,n-1,w)));
+    }
+}
+int main()
+{
+    int value[]={60,100,120};
+    int weight[]={10,20,30};
+    int n=sizeof(value)/sizeof(value[0]);
+    cout<<knapsack(value,weight,n,Knapsack_Capacity)<<endl;
+}
+
+/// Knapsack Problem. Dynamic Programming approach.
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define Knapsack_Capacity 8
+using namespace std;
+int main()
+{
+    int value[]={0,1,2,5,6};
+    int weight[]={0,2,3,4,5};
+    int n=sizeof(value)/sizeof(value[0]);
+    int m=Knapsack_Capacity+1;
+    int knapsack[n][m];
+    int count_team[n-1];
+    for(int i=0;i<n-1;i++){
+        count_team[i]=0;
+    }
+    for(int i=0;i<n;i++){
+        for(int w=0;w<m;w++){
+            if(i==0||w==0){
+                knapsack[i][w]=0;
+            }
+            else if(w<weight[i]){
+                knapsack[i][w]=knapsack[i-1][w];
+            }
+            else{
+                knapsack[i][w]=max(knapsack[i-1][w],knapsack[i-1][w-weight[i]]+value[i]);
+            }
+        }
+    }
+    cout<<"Cost:"<<knapsack[n-1][m-1]<<endl;
+    n-=1;
+    m-=1;
+    int i=n;/// 4
+    int j=m;/// 8
+    while((i>0)||(j>0)){
+        if(knapsack[i][j]==knapsack[i-1][j]){
+            i--;
+        }
+        else{
+            count_team[i-1]=1;
+            j-=weight[i];
+            i-=1;
+        }
+    }
+    for(int i=0;i<n;i++){
+        cout<<count_team[i]<<" ";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

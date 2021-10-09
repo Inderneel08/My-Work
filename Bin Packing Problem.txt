@@ -1,0 +1,46 @@
+/// Bin packing problem.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define capacity 10
+using namespace std;
+int compare_operator(int x,int y)
+{
+    return(x>y);
+}
+int find_sum(vector<int> sum[],int y)
+{
+    int summation=0;
+    for(vector<int>::iterator itr=sum[y].begin();itr!=sum[y].end();itr++){
+        summation+=*(itr);
+    }
+    return(summation);
+}
+int print_number_of_bins(int weight[],int n)
+{
+    /// Capacity of bin is 10.
+    vector <int> bins[n];
+    int max_bins=1;
+    int j=0;  /// Iterator for the weight array.
+    int i=0; ///  Iterator for the array of bins.
+    while(j<n){
+        if(find_sum(bins,i)+weight[j]<=capacity){
+            bins[i].push_back(weight[j]);
+            j++;
+            max_bins=max(max_bins,i+1);
+            i=0;
+        }
+        else{
+            i++;
+        }
+    }
+    return(max_bins);
+}
+int main()
+{
+    int weight[]={4,8,1,4,2,1};
+    int n=sizeof(weight)/sizeof(weight[0]);
+    sort(weight,weight+n,compare_operator);
+    cout<<"Total number of bins:"<<print_number_of_bins(weight,n);
+    ///print_number_of_bins(weight,n);
+}

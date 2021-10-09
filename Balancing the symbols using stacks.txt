@@ -1,0 +1,63 @@
+					   Balancing Symbols
+( ->Expressions.
+[ ->Expressions.
+{ ->Block of statements.
+
+Procedures->
+
+i)Read characters from expression.
+ii)If character is open symbol '('or '[' or '{'. Push the symbol to the stack.
+iii)If character is closed symbol ')' or ']' or '}'.
+	*Check if stack is empty.
+		*If true expression unbalanced.
+	*If stack is not empty.
+		*Pop the symbol from stack and compare with the symbol which is read.
+			*If matches that implies balanced.
+			*If doesn't matches then expression is unbalanced.
+
+iv)Repeat the process upon recieving everytime a balanced statement until stack is not empty.
+V)If recieved an unbalanced statement break the loop no need for further examining.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

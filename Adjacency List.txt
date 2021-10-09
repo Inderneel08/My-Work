@@ -1,0 +1,95 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct node{
+    int vertex;
+    struct node*next;
+    node(int x)
+    {
+        vertex=x;
+        next=NULL;
+    }
+};
+struct Graph{
+    int number_of_vertices;
+    struct node**adjlists;
+};
+struct node*create_edge(int v)
+{
+    struct node*newnode=new node(v);
+    return(newnode);
+}
+///Front insertion into the adjacency list.(Time complexity O(1) )
+void add_edge(struct Graph*graph,int source,int destination)
+{
+    ///An edge from source to the destination.
+    struct node*newnode=create_edge(destination);
+    newnode->next=graph->adjlists[source];
+    graph->adjlists[source]=newnode;
+    ///An edge from the destination and the source also exists.
+    newnode=create_edge(source);
+    newnode->next=graph->adjlists[destination];
+    graph->adjlists[destination]=newnode;
+}
+///Back insertion into the adjacency list.(Time complexity O(N) )
+void add_edge(Graph*graph,int source,int destination)
+{
+    /// Add an edge from the source to the destination.
+    struct node*newnode=create_edge(destination);
+    if(graph->adjlists[source]==NULL){
+        graph->adjlists[source]=newnode;
+    }
+    else{
+        node*temp;
+        temp=graph->adjlists[source];
+        while(temp->next!=NULL){
+            temp=temp->next;
+        }
+        temp->next=newnode;
+    }
+    /// Add an edge from the destination to the source.
+    newnode=create_edge(source);
+    if(graph->adjlists[destination]==NULL){
+        graph->adjlists[destination]=newnode;
+    }
+    else{
+        node*temp;
+        temp=graph->adjlists[destination];
+        while(temp->next!=NULL){
+            temp=temp->next;
+        }
+        temp->next=newnode;
+    }
+}
+void print_graph(struct Graph*graph)
+{
+    for(int v=0;v<graph->number_of_vertices;v++){
+        node*temp=graph->adjlists[v];
+        cout<<"Vertex:"<<v<<"->";
+        while(temp!=NULL){
+            cout<<temp->vertex<<" ";
+            temp=temp->next;
+        }
+        cout<<endl;
+    }
+}
+struct Graph*create_graph(int no)
+{
+    struct Graph*graph=(struct Graph*)malloc(sizeof(struct Graph));
+    graph->number_of_vertices=no;
+    graph->adjlists=(struct node**)malloc(no*sizeof(struct node*));
+    for(int i=0;i<no;i++){
+        graph->adjlists[i]=NULL;
+    }
+    return(graph);
+}
+int main()
+{
+    Graph*s=create_graph(4);
+    add_edge(s,0,1);
+    add_edge(s,0,2);
+    add_edge(s,0,3);
+    add_edge(s,1,2);
+    print_graph(s);
+}

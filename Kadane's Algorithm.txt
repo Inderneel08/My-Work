@@ -1,0 +1,27 @@
+/// Kadane's Algorithm.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int maximum_sum(int a[],int n)
+{
+    int maximum_so_far=INT_MIN;
+    int maximum_here=0;
+    for(int i=0;i<n;i++){
+        maximum_here+=a[i];
+        if(maximum_here<0){
+            maximum_here=0;
+        }
+        if(maximum_so_far<maximum_here){
+            maximum_so_far=maximum_here;
+        }
+    }
+    return(maximum_so_far);
+}
+int main()
+{
+    int a[]={-2,-3,4,-1,-2,1,5,-3};
+    int n=sizeof(a)/sizeof(a[0]);
+    int sum=maximum_sum(a,n);
+    cout<<"Sum:"<<sum;
+}

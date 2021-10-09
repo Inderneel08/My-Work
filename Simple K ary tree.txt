@@ -1,0 +1,62 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct node{
+    int data;
+    node*child[3];
+    node(int x)
+    {
+        data=x;
+        child[0]=NULL;
+        child[1]=NULL;
+        child[2]=NULL;
+    }
+};
+void inorder(struct node*root)
+{
+    if(root==NULL){
+        return;
+    }
+    for(int i=0;i<2;i++){
+        inorder(root->child[i]);
+    }
+    cout<<root->data<<" ";
+    inorder(root->child[2]);
+}
+void postorder(struct node*root)
+{
+    if(root==NULL){
+        return;
+    }
+    for(int i=0;i<2;i++){
+        postorder(root->child[i]);
+    }
+    postorder(root->child[2]);
+    cout<<root->data<<" ";
+}
+void preorder(struct node*root)
+{
+    if(root==NULL){
+        return;
+    }
+    cout<<root->data<<" ";
+    for(int i=0;i<2;i++){
+        preorder(root->child[i]);
+    }
+    preorder(root->child[2]);
+}
+int main()
+{
+    struct node*root=NULL;
+    root=new node(1);
+    root->child[0]=new node(2);
+    root->child[1]=new node(3);
+    root->child[2]=new node(4);
+    root->child[0]->child[0]=new node(5);
+    root->child[0]->child[1]=new node(6);
+    root->child[0]->child[2]=new node(7);
+    inorder(root);
+    postorder(root);
+    preorder(root);
+}

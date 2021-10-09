@@ -1,0 +1,139 @@
+/// Code for Sparse Matrix using pointers and arrays.
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+void check_for_sparse_matrix(int**arr,int rows,int cols)
+{
+    static int count_=0;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            if(*(*(arr+i)+j)==0){
+                count_++;
+            }
+        }
+    }
+    if(count_>((rows*cols)/2)){
+        cout<<"The given matrix is a sparse matrix"<<endl;
+    }
+    else{
+        cout<<"The given matrix is not a sparse matrix"<<endl;
+    }
+}
+void display_array(int**arr,int rows,int cols)
+{
+    cout<<"Enter the elements that need to be inserted inside the matrix:"<<endl;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            cin>>*(*(arr+i)+j);
+        }
+    }
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            cout<<*(*(arr+i)+j)<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+    check_for_sparse_matrix(arr,rows,cols);
+}
+int main()
+{
+    int rows,cols;
+    cout<<"Enter the number of rows:"<<endl;
+    cin>>rows;
+    cout<<"Enter the number of columns:"<<endl;
+    cin>>cols;
+    int**arr=new int*[rows*cols];
+    for(int i=0;i<cols;i++){
+        arr[i]=new int[rows];
+    }
+    display_array(arr,rows,cols);
+}
+
+///Using single linked list.
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct node{
+    int row_number;
+    int col_number;
+    int value;
+    struct node*next;
+    node(int x)
+    {
+        value=x;
+        next=NULL;
+    }
+}*head,*tail;
+void generate_matrix_sparse(int**arr,int rows,int cols)
+{
+    struct node*s=NULL;
+    int count_=0;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            if(*(*(arr+i)+j)!=0){
+                if(head==NULL){
+                    head=new node(*(*(arr+i)+j));
+                    head->row_number=i;
+                    head->col_number=j;
+                    tail=head;
+                }
+                else{
+                    s=new node(*(*(arr+i)+j));
+                    s->row_number=i;
+                    s->col_number=j;
+                    tail->next=s;
+                    tail=s;
+                }
+            }
+        }
+    }
+    struct node*temp=head;
+    while(temp!=tail){
+        temp=temp->next;
+        count_++;
+    }
+    if((count_)<((rows*cols)/2)){
+        cout<<"The given matrix is sparse matrix"<<endl;
+    }
+    else{
+        cout<<"The above matrix is not a sparse matrix"<<endl;
+    }
+}
+void generate_matrix(int**arr,int rows,int cols)
+{
+    cout<<"Enter the elements that need to be inserted in the matrix:"<<endl;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            cin>>*(*(arr+i)+j);
+        }
+    }
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<cols;j++){
+            cout<<*(*(arr+i)+j)<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+    generate_matrix_sparse(arr,rows,cols);
+}
+int main()
+{
+    int rows;
+    int cols;
+    cout<<"Enter the number of rows that we require for the matrix:"<<endl;
+    cin>>rows;
+    cout<<"Enter the number of columns that we require for the matrix:"<<endl;
+    cin>>cols;
+    int**arr=new int*[cols];
+    for(int i=0;i<cols;i++){
+        arr[i]=new int[rows];
+    }
+    generate_matrix(arr,rows,cols);
+}
+
+
+

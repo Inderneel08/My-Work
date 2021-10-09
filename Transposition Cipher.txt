@@ -1,0 +1,64 @@
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<cstring>
+#include<fstream>
+using namespace std;
+int main()
+{
+    /*
+    string plain_text="HELLOWORLD";
+    string cipher_text;
+    int size_temp=(plain_text.size()/2)-1;
+    char matrix[size_temp-1][size_temp];
+    for(int i=0;i<size_temp-1;i++){
+        for(int j=0;j<size_temp;j++){
+            matrix[i][j]=' ';
+        }
+    }
+    int n=0;
+    for(int i=0;i<size_temp-1;i++){
+        for(int j=0;j<size_temp;j++){
+            if(n<plain_text.size()){
+                matrix[i][j]=plain_text[n];
+                n++;
+            }
+        }
+    }
+    n=0;
+    */
+    /* Encryption Algorithm */
+    /*
+    for(int i=0;i<size_temp;i++){
+        for(int j=0;j<size_temp-1;j++){
+            cipher_text[n]=matrix[j][i];
+            n++;
+        }
+    }
+    for(int i=0;i<n;i++){
+        cout<<cipher_text[i];
+    }
+    */
+    string cipher_text="HOLEWDLO LR ";
+    string plain_text;
+    int key=4;
+    int col=key;/// Number of columns is 4.
+    int row=(cipher_text.size()/col); /// Number of rows is 3.
+    char matrix_tk[row][col];
+    int x=0;
+    for(int i=0;i<col;i++){
+        for(int j=0;j<row;j++){
+            matrix_tk[j][i]=cipher_text[x];
+            x++;
+        }
+    }
+    x=0;
+    for(int i=0;i<row;i++){
+        for(int j=0;j<col;j++){
+            plain_text[x]=matrix_tk[i][j];
+            x++;
+        }
+    }
+    for(int i=0;i<x;i++){
+        cout<<plain_text[i];
+    }
+}

@@ -1,0 +1,13 @@
+Double Hashing-:
+
+[hash1(key)+i*hash2(key)%sizeoftable]
+hash1(key)=key%sizeoftable
+hash2(key)=PRIME-(key%PRIME) where PRIME is a prime smaller than table size.
+
+Quadratic Probing-:
+
+H(k)=H1(key)%10+i*i
+
+Linear Probing-:
+
+H(k)=H2(key)%10+i

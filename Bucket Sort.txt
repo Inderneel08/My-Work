@@ -1,0 +1,102 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<math.h>
+using namespace std;
+struct node{
+    double vertex;
+    struct node*next;
+    node(double x)
+    {
+        vertex=x;
+        next=NULL;
+    }
+};
+struct Graph{
+    struct node**adjlists;
+};
+node*create_edge(double number)
+{
+    struct node*newnode=new node(number);
+    return(newnode);
+}
+Graph*create_Graph(int number)
+{
+    Graph*s=(struct Graph*)malloc(sizeof(Graph));
+    s->adjlists=(struct node**)malloc(number*sizeof(struct node*));
+    for(int i=0;i<number;i++){
+        s->adjlists[i]=NULL;
+    }
+    return(s);
+}
+void gather_linked_list(Graph*graph,int n,double*arr)
+{
+    static int j=0;
+    for(int i=0;i<10;i++){
+        struct node*temp=NULL;
+        if(graph->adjlists[i]!=NULL){
+            temp=graph->adjlists[i];
+            while(temp!=NULL){
+                *(arr+j)=temp->vertex;
+                j++;
+                temp=temp->next;
+            }
+        }
+    }
+}
+void add_edge(Graph*s,double num)
+{
+    if(num<1&&num>0){
+        struct node*newnode=create_edge(num);
+        int t=floor(num*10);
+        if(s->adjlists[t]==NULL){
+            s->adjlists[t]=newnode;
+        }
+        else{
+            struct node*prevnode=s->adjlists[t];
+            struct node*temp=s->adjlists[t];
+            while((temp->vertex<newnode->vertex)&&(temp->next!=NULL)){
+                prevnode=temp;
+                temp=temp->next;
+            }
+            if(temp->vertex>newnode->vertex){
+                if(temp==s->adjlists[t]){
+                    node*temp=s->adjlists[t];
+                    s->adjlists[t]=newnode;
+                    s->adjlists[t]->next=temp;
+                }
+                else{
+                    prevnode->next=newnode;
+                    newnode->next=temp;
+                }
+            }
+            else{
+                temp->next=newnode;
+            }
+        }
+    }
+}
+void bucket_sort(double*arr,int n)
+{
+    Graph*graph=create_Graph(10);
+    for(int i=0;i<n;i++){
+        add_edge(graph,arr[i]);
+    }
+    gather_linked_list(graph,n,arr);
+}
+int main()
+{
+    int n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    double*arr=new double[n];
+    cout<<"Enter the elements that need to be inserted inside the array:"<<endl;
+    for(int i=0;i<n;i++){
+        cin>>*(arr+i);
+    }
+    bucket_sort(arr,n);
+    for(int i=0;i<n;i++){
+        cout<<*(arr+i)<<" ";
+    }
+}
+

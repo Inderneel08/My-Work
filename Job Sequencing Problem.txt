@@ -1,0 +1,45 @@
+///Job Sequencing Problem.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct Job{
+    char job_id;
+    int deadline;
+    int profit;
+};
+bool comparison_operator(Job a,Job b)
+{
+    return(a.profit>b.profit);
+}
+int main()
+{
+    Job arr[]={{'a',2,100},{'b',1,19},{'c',2,27},{'d',1,25},{'e',3,15}};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    sort(arr,arr+n,comparison_operator);
+    int max_size=0;
+    for(int i=0;i<n;i++){
+        if(max_size<arr[i].deadline){
+            max_size=arr[i].deadline;
+        }
+    }
+    /// max_size=6;
+                       /// 6 + 1=7.
+    char*slot=new char[max_size+1];
+    for(int i=0;i<max_size+1;i++){
+        slot[i]='\0';
+    }
+    for(int i=0;i<n;i++){
+        for(int j=arr[i].deadline-1;j>=0;j--){
+            if(slot[j]=='\0'){
+                slot[j]=arr[i].job_id;
+                break;
+            }
+        }
+    }
+    for(int i=0;i<max_size;i++){
+        if(slot[i]!='\0'){
+            cout<<slot[i]<<" ";
+        }
+    }
+}

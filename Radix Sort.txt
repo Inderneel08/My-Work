@@ -1,0 +1,63 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int find_biggest(int*arr,int n)
+{
+    int biggest=arr[0];
+    for(int i=1;i<n;i++){
+        if(biggest<arr[i]){
+            biggest=arr[i];
+        }
+    }
+    return(biggest);
+}
+void counting_sort(int*arr,int i,int n)
+{
+    int*output=new int[n];
+    int*count_array=new int[100];
+    for(int j=0;j<10;j++){
+        *(count_array+j)=0;
+    }
+    for(int j=0;j<n;j++){
+        count_array[(arr[j]/i)%10]++;
+    }
+    for(int j=1;j<10;j++){
+        count_array[j]+=count_array[j-1];
+    }
+    for(int j=n-1;j>=0;j--){
+        output[count_array[(arr[j]/i)%10]-1]=arr[j];
+        count_array[(arr[j]/i)%10]--;
+    }
+    for(int j=0;j<n;j++){
+        arr[j]=output[j];
+    }
+}
+void radiax_sort(int*arr,int n)
+{
+    int c=0;
+    int x=find_biggest(arr,n);
+    while(x!=0){
+        x=x/10;
+        c++;
+    }
+    for(int i=1;c>0;i=i*10){
+        counting_sort(arr,i,n);
+        c--;
+    }
+}
+int main()
+{
+    int n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int*arr=new int[n];
+    cout<<"Enter the elements that need to be inserted inside the array:"<<endl;
+    for(int i=0;i<n;i++){
+        cin>>*(arr+i);
+    }
+    radiax_sort(arr,n);
+    for(int i=0;i<n;i++){
+        cout<<*(arr+i)<<" ";
+    }
+}

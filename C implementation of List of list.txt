@@ -1,0 +1,66 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+class Node{
+public:
+    string sub;
+    Node*next;
+};
+class array_of_linked_list{
+public:
+    char*item=new char;
+    Node x;
+    void initialize_list(array_of_linked_list*head_ref,int i)
+    {
+        switch(i)
+        {
+        case 1:
+            head_ref->item="Monday";
+            break;
+        case 2:
+            head_ref->item="Tuesday";
+            break;
+        case 3:
+            head_ref->item="Wednesday";
+            break;
+        case 4:
+            head_ref->item="Thursday";
+            break;
+        case 5:
+            head_ref->item="Friday";
+            break;
+        case 6:
+            head_ref->item="Saturday";
+            break;
+        case 7:
+            head_ref->item="Sunday";
+            break;
+        }
+        head_ref->x.next=NULL;
+    }
+}*head[7];
+int main()
+{
+    for(int i=0;i<7;i++){
+        head[i]=NULL;
+        array_of_linked_list*temp=(array_of_linked_list*)malloc(sizeof(array_of_linked_list));
+        head[i]=temp;
+        head[i]->initialize_list(head[i],i+1);
+    }
+    for(int i=0;i<7;i++){
+        Node*temp=new Node;
+        string s;
+        cin>>s;
+        temp->sub=s;
+        head[i]->x.next=temp;
+    }
+    for(int i=0;i<7;i++){
+        cout<<head[i]->item<<" ";
+    }
+    cout<<endl;
+    for(int i=0;i<7;i++){
+        cout<<head[i]->x.next->sub<<" ";
+    }
+}
+

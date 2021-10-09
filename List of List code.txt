@@ -1,0 +1,36 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<list>
+using namespace std;
+void print_list(list<list<int> >double_list)
+{
+    cout<<"["<<endl;
+    list<list<int> >::iterator double_itr;
+    for(double_itr=double_list.begin();double_itr!=double_list.end();double_itr++){
+        cout<<" [";
+        list<int>::iterator single_itr;
+        list<int>&single_pointer=*double_itr;
+        for(single_itr=single_pointer.begin();single_itr!=single_pointer.end();single_itr++){
+            cout<<" "<<*single_itr<<" ";
+        }
+        cout<<"]"<<endl;
+    }
+    cout<<"]"<<endl;
+}
+int main()
+{
+    list<list<int> >nested_list;
+    list<int>single_list;
+    int n=3;
+    for(int i=0;i<n;i++){
+        int m=i+2;
+        for(int j=0;j<m;j++){
+            int num=i+j;
+            single_list.push_back(num);
+        }
+        nested_list.push_back(single_list);
+        single_list.erase(single_list.begin(),single_list.end());
+    }
+    print_list(nested_list);
+}

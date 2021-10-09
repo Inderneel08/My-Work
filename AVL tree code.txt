@@ -1,0 +1,155 @@
+///Insertion and deletion in an AVL tree
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+class node{
+public:
+    int data;
+    node*left_t;
+    node*right_t;
+    int height;
+    node(int x)
+    {
+        data=x;
+        left_t=NULL;
+        right_t=NULL;
+    }
+};
+int find_height(node*root)
+{
+    int left_height=0;
+    int right_height=0;
+    if(root==NULL){
+        return(0);
+    }
+    else{
+        left_height=left_height+1+find_height(root->left_t);
+        right_height=right_height+1+find_height(root->right_t);
+        return(max(left_height,right_height));
+    }
+}
+node*right_rotate(node*t)
+{
+    node*y=t->left_t;
+    t->left_t=y->right_t;
+    y->right_t=t;
+    y->height=find_height(y);
+    t->height=find_height(t);
+    return(y);
+}
+node*left_rotate(node*t)
+{
+    node*y=t->right_t;
+    t->right_t=y->left_t;
+    y->left_t=t;
+    y->height=find_height(y);
+    t->height=find_height(t);
+    return(y);
+}
+void inorder_traversal(node*root)
+{
+    if(root!=NULL){
+        inorder_traversal(root->left_t);
+        cout<<root->data<<" ";
+        inorder_traversal(root->right_t);
+    }
+}
+node*delete_node(node*root,int key)
+{
+    if(root==NULL){
+        return(root);
+    }
+    else{
+        if(root->data==key){
+            if(root->left_t==NULL){
+                node*temp=root->right_t;
+                delete(root);
+                return(temp);
+            }
+            else if(root->right_t==NULL){
+                node*temp=root->left_t;
+                delete(root);
+                return(temp);
+            }
+            node*temp=root->left_t;
+            root->data=temp->data;
+            root->left_t=delete_node(temp,temp->data);
+        }
+        else{
+            if(root->data<key){
+                root->right_t=delete_node(root->right_t,key);
+            }
+            else{
+                root->left_t=delete_node(root->left_t,key);
+            }
+        }
+        root->height=find_height(root);
+        int get_balance_factor=find_height(root->left_t)-find_height(root->right_t);
+        if(get_balance_factor>1){
+            if(root->left_t->right_t==NULL){
+                return(right_rotate(root));
+            }
+            else{
+                root->left_t=left_rotate(root->left_t);
+                return(right_rotate(root));
+            }
+        }
+        if(get_balance_factor<-1){
+            if(root->right_t->left_t==NULL){
+                return(left_rotate(root));
+            }
+            else{
+                root->right_t=right_rotate(root->right_t);
+                return(left_rotate(root));
+            }
+        }
+        return(root);
+    }
+}
+node*create_AVL_tree(node*root,int key)
+{
+    if(root==NULL){
+        root=new node(key);
+        root->height=find_height(root);
+        return(root);
+    }
+    else{
+        if(key>(root->data)){
+            root->right_t=create_AVL_tree(root->right_t,key);
+        }
+        else if(key<(root->data)){
+            root->left_t=create_AVL_tree(root->left_t,key);
+        }
+        root->height=find_height(root);
+        int balance_factor=find_height(root->left_t)-find_height(root->right_t);
+        if(balance_factor>1&&key<root->left_t->data){
+            return(right_rotate(root));
+        }
+        if(balance_factor>1&&key>root->left_t->data){
+            root->left_t=left_rotate(root->left_t);
+            return(right_rotate(root));
+        }
+        if(balance_factor<-1&&key>root->right_t->data){
+            return(left_rotate(root));
+        }
+        if(balance_factor<-1&&key<root->right_t->data){
+            root->right_t=right_rotate(root->right_t);
+            return(left_rotate(root));
+        }
+        return(root);
+    }
+}
+int main()
+{
+    node*root=NULL;
+    root=create_AVL_tree(root,10);
+    root=create_AVL_tree(root,20);
+    root=create_AVL_tree(root,30);
+    root=create_AVL_tree(root,40);
+    root=create_AVL_tree(root,50);
+    root=create_AVL_tree(root,25);
+    root=delete_node(root,50);
+    inorder_traversal(root);
+}

@@ -1,0 +1,41 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#define max_strength 7
+using namespace std;
+int*arr_size=new int[max_strength];
+void add_function_hashmap(int element)
+{
+    int x=element%max_strength;
+    if(arr_size[x]==0){
+        arr_size[x]=element;
+    }
+    else{
+        int t=0;
+        for(int i=1;i<max_strength;i++){
+            x=((element%max_strength)+i*i)%max_strength;
+            if(arr_size[x]==0){
+                arr_size[x]=element;
+                t=1;
+                break;
+            }
+        }
+        if(t==0){
+            cout<<"Either load factor exceeded or size of the table is not prime"<<endl;
+        }
+    }
+}
+int main()
+{
+    int element;
+    for(int i=0;i<max_strength;i++){
+        arr_size[i]=0;
+    }
+    for(int i=0;i<max_strength;i++){
+        cin>>element;
+        add_function_hashmap(element);
+    }
+    for(int i=0;i<max_strength;i++){
+        cout<<arr_size[i]<<" ";
+    }
+}

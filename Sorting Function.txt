@@ -1,0 +1,6 @@
+a is the array.
+To Sort functions increasing order wise 
+sort(a,a+n);
+
+To Sort functions decreasing order wise
+sort(a,a+n,greater<int>());

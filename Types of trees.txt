@@ -1,0 +1,31 @@
+Full Binary Tree:-
+It's a type of tree in which every node of the tree has two or no child nodes.
+
+Complete Binary tree:-
+It's a type of binary tree in which every last leaf node is a left node,other than the last leaf node every node has two child nodes.
+
+Perfect Binary tree:-It's a type of binary tree in which every node has 2 nodes except the leaf nodes.
+
+Degenerate or Pathological tree:-It's a type of binary tree in which every node except leaf node has has one node which is either at left or right side.
+
+Skew trees:-It's a type of tree in which all child nodes are aligned in a specific direction.
+
+Balanced Binary Tree:-It's a type of binary tree in which the difference between left and right subtree is 0 or 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

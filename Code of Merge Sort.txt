@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+void merge_method(int*arr,int l,int m,int n)
+{
+    int n1=m-l+1;
+    int n2=n-m;
+    int*L1=new int[n1];
+    int*L2=new int[n2];
+
+    for(int i=0;i<n1;i++){
+        L1[i]=arr[i+l];
+    }
+    for(int j=0;j<n2;j++){
+        L2[j]=arr[j+m+1];
+    }
+    int i=0,j=0;
+    int k=l;
+    while(i<n1&&j<n2){
+        if(L1[i]<L2[j]){
+            arr[k]=L1[i];
+            i++;
+        }
+        else{
+            arr[k]=L2[j];
+            j++;
+        }
+        k++;
+    }
+    while(i<n1){
+        arr[k]=L1[i];
+        k++;
+        i++;
+    }
+    while(j<n2){
+        arr[k]=L2[j];
+        k++;
+        j++;
+    }
+}
+void merge_sort(int*arr,int l,int m)
+{
+    if(l<m){
+        int mid = (l+m)/2;
+        merge_sort(arr,l,mid);
+        merge_sort(arr,mid+1,m);
+        merge_method(arr,l,mid,m);
+    }
+}
+int main()
+{
+    int n;
+    cin>>n;
+    int*arr=new int[n];
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    merge_sort(arr,0,n-1);
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+}

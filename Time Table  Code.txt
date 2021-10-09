@@ -1,0 +1,129 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<cstring>
+using namespace std;
+class childnode{
+public:
+    char*sub=new char;
+    //int time;
+    childnode*nxt;
+}*h[7],*t[7];
+class node:public childnode{
+public:
+    char*day;
+    childnode*down;
+    node*next;
+}*head,*tail;
+void initialize_timetable(void)
+{
+    node*s;
+    s=new node;
+    static int count_=7;
+    s->day="Mon";
+    head=s;
+    tail=s;
+    count_--;
+    while(count_>=1){
+        s=new node;
+        switch(count_)
+        {
+        case 6:
+            s->day="Tue";
+            break;
+        case 5:
+            s->day="Wed";
+            break;
+        case 4:
+            s->day="Thurs";
+            break;
+        case 3:
+            s->day="Fri";
+            break;
+        case 2:
+            s->day="Sat";
+            break;
+        case 1:
+            s->day="Sun";
+            break;
+        }
+        tail->next=s;
+        tail=tail->next;
+        count_--;
+    }
+}
+void insert_multi_list(void)
+{
+    int count_=0;
+    node*temp=head;
+    childnode*s;
+    char*d=new char;
+    //char*subject=new char;
+    cout<<"Enter the day at which you will insert the subject:"<<endl;
+    cin>>d;
+    while(strcmp(d,temp->day)!=0){
+        temp=temp->next;
+        count_++;
+    }
+    char element;
+    cout<<"Do you want to insert a subject:"<<endl;
+    cin>>element;
+    while(element=='y'){
+        cout<<"Enter the subject:"<<endl;
+        s=new childnode;
+        cin>>s->sub;
+        s->nxt=NULL;
+        if(h[count_]==NULL){
+            temp->down=s;
+            h[count_]=s;
+            t[count_]=s;
+        }
+        else{
+            t[count_]->nxt=s;
+            t[count_]=t[count_]->nxt;
+        }
+        cout<<"Do you want to insert a subject:"<<endl;
+        cin>>element;
+    }
+}
+void print_multi_list(void)
+{
+    node*temp=head;
+    int count_=0;
+    cout<<"Enter the day,and the timetable of that day will be printed:"<<endl;
+    char*d=new char;
+    cin>>d;
+    while(strcmp(temp->day,d)!=0){
+        temp=temp->next;
+        count_++;
+    }
+    childnode*tmp=temp->down;
+    while(tmp!=NULL){
+        cout<<tmp->sub<<" ";
+        tmp=tmp->nxt;
+    }
+}
+int main()
+{
+    int i;
+    cout<<"Choose amongst the given options:"<<endl;
+    cin>>i;
+    while(i==1||i==2||i==3){
+        switch(i)
+        {
+        case 1:
+            initialize_timetable();
+            break;
+        case 2:
+            insert_multi_list();
+            break;
+        case 3:
+            print_multi_list();
+            break;
+        }
+        fflush(stdin);
+        cout<<endl;
+        cout<<"Choose again:"<<endl;
+        cin>>i;
+    }
+}

@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+#include<iostream>
+#include<map>
+#include<vector>
+#include<sstream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+map<int,int> check_pattern(string txt,string pattern)
+{
+    map<int,int> xmpt;
+    int check1=1;
+    for(int i=0;i<=txt.size()-pattern.size();i++){
+        int j=0;
+        for(j=0;j<pattern.size();j++){
+            if(txt[i+j]!=pattern[j]){
+                break;
+            }
+        }
+        if(j==pattern.size()){
+            xmpt[check1]=i;
+            check1++;
+        }
+    }
+    if(check1==1){
+        xmpt[0]=0;
+    }
+    return(xmpt);
+}
+int main()
+{
+    string txt,pattern;
+    txt="TODAY IS A GOOD DAY";
+    pattern="OOD DAY";
+    map<int,int> xt=check_pattern(txt,pattern);
+    map<int,int>::iterator it=xt.begin();
+    if(it->first==0){
+        cout<<"Element not present"<<endl;
+    }
+    else{
+        cout<<"Element present at indexes:";
+        for(it=xt.begin();it!=xt.end();it++){
+            cout<<it->second<<" ";
+        }
+    }
+}

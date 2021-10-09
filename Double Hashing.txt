@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#define max_strength 10
+using namespace std;
+int*array_size=new int[max_strength];
+void add_elements(int element)
+{
+    int x=element%max_strength;
+    if(array_size[x]==0){
+        array_size[x]=element;
+    }
+    else{
+        for(int i=1;i<max_strength;i++){
+            x=(element%max_strength+i*(7-(element%7)))%max_strength;
+            if(array_size[x]==0){
+                array_size[x]=element;
+                break;
+            }
+        }
+    }
+}
+int main()
+{
+    int element;
+    int n=7;
+    for(int i=0;i<max_strength;i++){
+        array_size[i]=0;
+    }
+    for(int i=0;i<n;i++){
+        cin>>element;
+        add_elements(element);
+    }
+    for(int i=0;i<max_strength;i++){
+        cout<<array_size[i]<<" ";
+    }
+}

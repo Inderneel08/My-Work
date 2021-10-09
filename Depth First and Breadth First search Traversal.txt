@@ -1,0 +1,201 @@
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#include<queue>
+using namespace std;
+class Node{
+public:
+    int data;
+    Node*next_t;
+    Node(int x)
+    {
+        data=x;
+        next_t=NULL;
+    }
+};
+Node*create_edge(int s)
+{
+    Node*new_node=new Node(s);
+    return(new_node);
+}
+class Graph{
+public:
+    int number_of_vertices;
+    Node**adjlists;
+    bool*visited;
+    void add_edge(Graph*t,int src,int dest)
+    {
+        ///Edge from source to the destination.
+        Node*new_node=create_edge(dest);
+        new_node->next_t=t->adjlists[src];
+        t->adjlists[src]=new_node;
+        ///Edge from destination to the source.
+        new_node=create_edge(src);
+        new_node->next_t=t->adjlists[dest];
+        t->adjlists[dest]=new_node;
+    }
+    void depth_first_search(Graph*t,int v);
+    void breadth_first_search(Graph*t,int v);
+    void print_graph(Graph*t);
+};
+Graph*create_graph(int number)
+{
+    Graph*t=new Graph;
+    t->number_of_vertices=number;
+    t->adjlists=new Node*[number];
+    t->visited=new bool[number];
+    for(int i=0;i<number;i++){
+        t->adjlists[i]=NULL;
+        t->visited[i]=0;
+    }
+    return(t);
+}
+void Graph::print_graph(Graph*t)
+{
+    for(int i=0;i<t->number_of_vertices;i++){
+        cout<<i<<"->";
+        Node*temp=t->adjlists[i];
+        while(temp!=NULL){
+            cout<<temp->data<<" ";
+            temp=temp->next_t;
+        }
+        cout<<endl;
+    }
+}
+void Graph::depth_first_search(Graph*t,int v)
+{
+    Node*adjlist=t->adjlists[v];
+    Node*temp=adjlist;
+    t->visited[v]=1;
+    cout<<v<<" ";
+    while(temp!=NULL){
+        int connected_vertex=temp->data;
+        if(t->visited[connected_vertex]==0){
+            t->depth_first_search(t,connected_vertex);
+        }
+        temp=temp->next_t;
+    }
+}
+void Graph::breadth_first_search(Graph*t,int v)
+{
+    queue<int> x;
+    x.push(v);
+    t->visited[v]=true;
+    while(!x.empty()){
+        int m=x.front();
+        x.pop();
+        cout<<m<<" ";
+        for(Node*temp=t->adjlists[m];temp!=NULL;temp=temp->next_t){
+            if(t->visited[temp->data]==false){
+                t->visited[temp->data]=true;
+                x.push(temp->data);
+            }
+        }
+    }
+}
+int main()
+{
+    Graph*g=NULL;
+    g=create_graph(5);
+    g->add_edge(g,0,1);
+    g->add_edge(g,0,2);
+    g->add_edge(g,0,3);
+    g->add_edge(g,0,4);
+    g->add_edge(g,1,2);
+    g->add_edge(g,1,3);
+    g->add_edge(g,2,4);
+    ///g->print_graph(g);
+    ///g->depth_first_search(g,0);
+    g->breadth_first_search(g,0);
+}
+
+////C++ code implementation
+
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+class Graph{
+public:
+    map<int,bool> visited;
+    map<int,list<int> > adj;
+    void add_edge(int v,int w);
+    void depth_first_search(int v);
+    void breadth_first_search(int v);
+};
+void Graph::add_edge(int v,int w)
+{
+    adj[v].push_back(w);
+    adj[w].push_back(v);
+}
+void Graph::breadth_first_search(int v)
+{
+    queue<int> q;
+    bool*visit=new bool[v];
+    for(int i=0;i<v;i++){
+        visit[i]=false;
+    }
+    visit[v]=true;
+    list<int>::iterator i;
+    q.push(v);
+    while(!q.empty()){
+        v=q.front();
+        cout<<v<<" ";
+        q.pop();
+        for(i=adj[v].begin();i!=adj[v].end();i++){
+            if(visit[*i]==false){
+                visit[*i]=true;
+                q.push(*i);
+            }
+        }
+    }
+}
+void Graph::depth_first_search(int v)
+{
+    static bool*visit=new bool[v];
+    for(int i=0;i<v;i++){
+        visit[v]=false;
+    }
+    visit[v]=true;
+    cout<<v<<" ";
+    list<int>::iterator itr;
+    for(itr=adj[v].begin();itr!=adj[v].end();itr++){
+        if(visit[*itr]==false){
+            depth_first_search(*itr);
+        }
+    }
+}
+int main()
+{
+    int n=5;
+    Graph*g=new Graph;
+    g->add_edge(0,1);
+    g->add_edge(0,4);
+    g->add_edge(1,2);
+    g->add_edge(1,3);
+    g->add_edge(1,4);
+    g->add_edge(2,3);
+    g->add_edge(3,4);
+    g->depth_first_search(2);
+    cout<<endl;
+    g->breadth_first_search(2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

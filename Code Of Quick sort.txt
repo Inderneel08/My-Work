@@ -1,0 +1,145 @@
+Pivot at the end-:
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int partition_array(int arr[],int x,int y)
+{
+    int i,j,pivot;
+    i=x-1;
+    pivot=arr[y];
+    for(j=x;j<y;j++){
+        if(arr[j]<pivot){
+            i++;
+            swap(arr[i],arr[j]);
+        }
+    }
+    swap(arr[i+1],arr[y]);
+    return(i+1);
+}
+void quick_sort(int arr[],int x,int y)
+{
+    int pi;
+    if(x<y){
+        pi=partition_array(arr,x,y);
+        quick_sort(arr,x,pi-1);
+        quick_sort(arr,pi+1,y);
+    }
+}
+int main()
+{
+    int i,n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int arr[n];
+    for(i=0;i<n;i++){
+        cin>>*(arr+i);
+    }
+    quick_sort(arr,0,n-1);
+    for(i=0;i<n;i++){
+        cout<<*(arr+i)<<" ";
+    }
+    cout<<endl;
+}
+
+Pivot at the begenning:-
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int partition_sort(int arr[],int l,int m)
+{
+    int pivot;
+    pivot=arr[l];
+    int i,j;
+    j=m;
+    i=m+1;
+    for(j=m;j>=l;j--){
+        if(arr[j]>pivot){
+            i--;
+            swap(arr[j],arr[i]);
+        }
+    }
+    swap(arr[i-1],arr[l]);
+    return(i-1);
+}
+void quick_sort(int arr[],int l,int m)
+{
+    if(l<m){
+        int pi;
+        pi=partition_sort(arr,l,m);
+        quick_sort(arr,l,pi-1);
+        quick_sort(arr,pi+1,m);
+    }
+}
+int main()
+{
+    int i,n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int arr[n];
+    cout<<"Enter the elements to be inserted inside the array:"<<endl;
+    for(i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    quick_sort(arr,0,n-1);
+    for(i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+
+Pivot at the middle:-
+
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+void swap_temp(int*a,int*b)
+{
+    int temp;
+    temp=*a;
+    *a=*b;
+    *b=temp;
+}
+int partition_array_sort(int*arr,int l,int m)
+{
+    int i=l;
+    int j=m;
+    int pivot=arr[(l+m)/2];
+    while(i!=j&&i<=m&&j>=l){
+        while(arr[i]<pivot){
+            i++;
+        }
+        while(arr[j]>pivot){
+            j--;
+        }
+        swap_temp(&arr[i],&arr[j]);
+    }
+    return(i);
+}
+void quick_sort(int*arr,int l,int m)
+{
+    if(l<m){
+        int pi=partition_array_sort(arr,l,m);
+        quick_sort(arr,l,pi-1);
+        quick_sort(arr,pi+1,m);
+    }
+}
+int main()
+{
+    int n;
+    cout<<"Enter the size of the array:"<<endl;
+    cin>>n;
+    int*arr=new int[n];
+    cout<<"Enter the elements inside the array:"<<endl;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+    }
+    quick_sort(arr,0,n-1);
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+}

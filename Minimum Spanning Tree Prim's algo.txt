@@ -1,0 +1,87 @@
+/// Minimum spanning tree.
+#include<bits/stdc++.h>
+#include<iostream>
+#include<cstdlib>
+#include<cstring>
+#include<fstream>
+#define V 5
+#define INF 10000
+using namespace std;
+bool check_index_entered(vector<int>&vmc,int index)
+{
+    for(int i=0;i<vmc.size();i++){
+        if(vmc[i]==index){
+            return(false);
+        }
+    }
+    return(true);
+}
+pair<vector<int>, int> minimum_spanning_cost(int graph[V][V])
+{
+    vector<int> visited;
+    pair<vector<int>, int> xmple;
+    ///  Starting index as 0
+    visited.push_back(0);
+    int sum=0;
+    while(visited.size()!=V){
+        queue<int> q;
+        for(int i=0;i<visited.size();i++){
+            q.push(visited[i]);
+        }
+        int small=INF;
+        int y_coordinate;
+        while(!q.empty()){
+            for(int i=0;i<V;i++){
+                if(graph[q.front()][i]!=0){
+                    if(small>graph[q.front()][i]){
+                        if(check_index_entered(visited,i)==true){
+                            small=graph[q.front()][i];
+                            y_coordinate=i;
+                        }
+                    }
+                }
+            }
+            q.pop();
+        }
+        sum+=small;
+        small=INF;
+        visited.push_back(y_coordinate);
+    }
+    xmple.first=visited;
+    xmple.second=sum;
+    return(xmple);
+}
+int main()
+{
+    /*        b(1)
+    a(0)        /
+    |  \7      /
+    |   \     /32
+    |     d(3)
+    |     / \
+  10|  /9   \23
+    c(2)      \
+               e(4)
+
+    */
+    int graph[V][V]={{0,0,10,7,0},
+                     {0,0,0,32,0},
+                     {10,0,0,9,0},
+                     {7,32,9,0,23},
+                     {0,0,0,23,0}};
+
+
+    pair<vector<int>,int> pairing=minimum_spanning_cost(graph);
+    cout<<"Minimum cost of the spanning tree is:"<<pairing.second<<endl;
+    vector<int> path=pairing.first;
+    cout<<"Path traveled is: ";
+    for(int i=0;i<path.size();i++){
+        if(i==path.size()-1){
+            cout<<path[i];
+        }
+        else{
+            cout<<path[i]<<"->";
+        }
+    }
+    cout<<endl;
+}
