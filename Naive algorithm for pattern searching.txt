@@ -1,0 +1,26 @@
+/// Naive string matching algorithm.
+#include<iostream>
+#include<cstdlib>
+#include<fstream>
+#include<cstring>
+using namespace std;
+int main()
+{
+    char text[]="TODAY IS A GOOD DAY";
+    char pattern[]="GOOD";
+    int n=sizeof(text)/sizeof(text[0]); /// sizeof text.
+    int m=sizeof(pattern)/sizeof(pattern[0]); /// size of pattern.
+
+
+    for(int i=0;i<=n-m;i++){
+        int j;
+        for(j=0;j<m-1;j++){
+            if(text[i+j]!=pattern[j]){
+                break;
+            }
+        }
+        if(j==m-1){
+            cout<<"Pattern found at position:"<<i<<endl;
+        }
+    }
+}
