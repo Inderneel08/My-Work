@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Solution{
+public:
+    int find(int N)
+    {
+            int start;
+            int i=0;
+            for(i=0;i<N;i++){
+                if(N-pow(2,i)<pow(2,i)){
+                    break;
+                }
+                else if(N-pow(2,i)==pow(2,i)){
+                    return(1);
+                }
+            }
+            start=1;                                                                   Forming a pattern of  1 , 1 3 , 1 3 5 7, 1 3 5 7 for values of N as  
+            N-=pow(2,i);                                                                                     1 , 2 3 , 4 5 6 7, 8 9 10 11 a series  where every 2^x = n is 1.  
+            while(N>0){
+                start+=2;
+                N--;
+            }
+            return(start);
+    }
+};
+
+
+int main() 
+{ 
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        int N;
+        cin>>N;
+        Solution ob;
+        cout << ob.find(N) << endl;
+    }
+    return 0; 
+}
