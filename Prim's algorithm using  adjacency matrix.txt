@@ -1,0 +1,110 @@
+/// Prim's algorithm for minimum spanning tree.
+#include<iostream>
+#include<vector>
+#include<set>
+#include<cstdlib>
+#include<fstream>
+#define INF 1000
+using namespace std;
+class Graph{
+public:
+    set<int> included;
+    
+    set<int> not_included;
+    
+    vector<pair<int,int> >pairs;
+    
+    vector<vector<int> > adj;
+    
+    Graph(int v)
+    {
+        vector<int> x;
+        for(int i=0;i<v;i++){
+            x.push_back(2*INF);
+        }
+        for(int i=0;i<v;i++){
+            adj.push_back(x);
+        }
+        for(int i=0;i<v;i++){
+            not_included.insert(i);
+        }
+    }
+
+    void print_graph(void)
+    {
+        int n=adj[0].size();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<adj[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+
+    void add_edges(int source,int destination,int weight)
+    {
+        adj[source][destination]=weight;
+        adj[destination][source]=weight;
+    }
+
+    void make_spanning_tree(void)
+    {
+        set<int>::iterator i,j;
+        included.insert(0);
+        not_included.erase(0);
+
+        while(!not_included.empty()){
+            int min=INF;
+            int min_x=INF;
+            int min_y=INF;
+            for(i=included.begin();i!=included.end();i++){
+                for(j=not_included.begin();j!=not_included.end();j++){
+                    if(min>adj[*i][*j]){
+                        min=adj[*i][*j];
+                        min_x=*i;
+                        min_y=*j;
+                    }
+                }
+            }
+            included.insert(min_y);
+            not_included.erase(min_y);
+            pairs.push_back(pair<int,int>(min_x,min_y));
+        }
+
+        cout<<"x"<<"-"<<"y"<<endl;
+
+        for(int i=0;i<pairs.size();i++){
+            cout<<pairs[i].first<<"-"<<pairs[i].second<<endl;
+        }
+    }
+
+    int find_cost_of_minimum_spanning_tree(void)
+    {
+        int sum=0;
+        for(int i=0;i<pairs.size();i++){
+            sum+=adj[pairs[i].first][pairs[i].second];
+        }
+        return(sum);
+    }
+
+};
+int main()
+{
+    Graph*g=new Graph(9);
+    g->add_edges(0,1,4);
+    g->add_edges(0,7,8);
+    g->add_edges(1,2,8);
+    g->add_edges(1,7,11);
+    g->add_edges(2,3,7);
+    g->add_edges(2,5,4);
+    g->add_edges(2,8,2);
+    g->add_edges(3,4,9);
+    g->add_edges(3,5,14);
+    g->add_edges(5,6,2);
+    g->add_edges(6,7,1);
+    g->add_edges(6,8,6);
+    g->add_edges(7,8,7);
+    g->make_spanning_tree();
+    cout<<"Cost of minimum spanning tree:";
+    cout<<g->find_cost_of_minimum_spanning_tree()<<endl;
+}
