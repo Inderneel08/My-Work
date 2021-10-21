@@ -1,0 +1,137 @@
+/// Prim's algorithm for minimum spanning tree using adjacency list.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+#define INF 1000
+using namespace std;
+class node{
+public:
+    int destination;
+    int weight;
+    node(int d,int w)
+    {
+        destination=d;
+        weight=w;
+    }
+};
+class Graph{
+public:
+    int number_of_vertices;
+
+    set<int> included;
+    
+    set<int> not_included;
+
+    vector<pair<int,int> >pairs;
+
+    list<node> *adjlists;
+    
+    Graph(int v)
+    {
+        for(int i=0;i<v;i++){
+            not_included.insert(i);
+        }
+        number_of_vertices=v;
+        adjlists=new list<node>[v];
+    }
+
+    void add_edges(int source,int destination,int weight)
+    {
+        node x(destination,weight);
+        node y(source,weight);
+        adjlists[source].push_back(x);
+        adjlists[destination].push_back(y);
+    }
+    
+    void print_graph(void)
+    {
+        cout<<"Source"<<"->"<<"Destination"<<" "<<"Weight"<<endl;
+        for(int i=0;i<number_of_vertices;i++){
+            for(auto j=adjlists[i].begin();j!=adjlists[i].end();j++){
+                cout<<i<<"->"<<j->destination<<" "<<j->weight<<endl;
+            }
+        }
+    }
+    bool check_set(set<int>included,int item)
+    {
+        for(auto i=included.begin();i!=included.end();i++){
+            if(*i==item){
+                return(true);
+            }
+        }
+        return(false);
+    }
+
+    int find_cost_of_minimum_spanning_tree(void)
+    {
+        int cost=0;
+
+        for(int i=0;i<pairs.size();i++){
+            for(auto j=adjlists[pairs[i].first].begin();j!=adjlists[pairs[i].first].end();j++){
+                if(j->destination==pairs[i].second){
+                    cost+=j->weight;
+                    break;
+                }
+            }
+        }
+        return(cost);
+    }
+    
+    void make_spanning_tree(void)
+    {
+        included.insert(0);
+        not_included.erase(0);
+
+        while(!not_included.empty()){
+            int min=INF;
+            int min_x=INF;
+            int min_y=INF;
+
+            for(auto i=included.begin();i!=included.end();i++){
+                for(auto j=adjlists[*i].begin();j!=adjlists[*i].end();j++){
+                    if(min>j->weight){
+                        if(!check_set(included,j->destination)){
+                            min=j->weight;
+                            min_x=*i;
+                            min_y=j->destination;
+                        }
+                    }
+                }
+            }
+            included.insert(min_y);
+            not_included.erase(min_y);
+            pairs.push_back(pair<int,int>(min_x,min_y));
+        }
+
+        cout<<"x"<<"-"<<"y"<<endl;
+
+        for(int i=0;i<pairs.size();i++){
+            cout<<pairs[i].first<<"-"<<pairs[i].second<<endl;
+        }
+    }
+
+};
+int main()
+{
+    Graph*g=new Graph(9);
+    g->add_edges(0,1,4);
+    g->add_edges(0,7,8);
+    g->add_edges(1,2,8);
+    g->add_edges(1,7,11);
+    g->add_edges(2,3,7);
+    g->add_edges(2,5,4);
+    g->add_edges(2,8,2);
+    g->add_edges(3,4,9);
+    g->add_edges(3,5,14);
+    g->add_edges(5,6,2);
+    g->add_edges(6,7,1);
+    g->add_edges(6,8,6);
+    g->add_edges(7,8,7);
+    ///g->print_graph();
+    
+    g->make_spanning_tree();
+
+    cout<<"Cost of minimum spanning tree:";
+    
+    cout<<g->find_cost_of_minimum_spanning_tree()<<endl;
+}
