@@ -1,0 +1,71 @@
+/// How to detect cycle in an undirected graph using DFS.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+class Graph{
+public:
+    map<int,list<int> >adjlist;
+    map<int,bool> visited;
+
+    Graph()
+    {
+
+    }
+
+    void add_edges(int source,int destination)
+    {
+        adjlist[source].push_back(destination);
+        adjlist[destination].push_back(source);
+    }
+
+    bool contains_cycle(int vertex,int parent,map<int,bool>&visited)
+    {
+        visited[vertex]=true;
+
+        for(auto i=adjlist[vertex].begin();i!=adjlist[vertex].end();i++){
+            if(visited[*i]==false){
+                bool cycle_mila=contains_cycle(*i,vertex,visited);
+                if(cycle_mila){
+                    return(true);
+                }
+            }
+            else if(visited[*i]==true && parent!=*i){
+                return(true);
+            }
+        }
+        return(false);
+    }
+
+};
+int main()
+{
+    Graph*g=new Graph();
+    g->add_edges(0,1);
+    g->add_edges(0,3);
+    g->add_edges(1,2);
+    g->add_edges(2,3);
+
+    for(int i=0;i<4;i++){
+        g->visited[i]=false;
+    }
+
+    bool cycle_mila=false;
+
+    for(int i=0;i<4;i++){
+        
+        for(int i=0;i<4;i++){
+           g->visited[i]=false;
+        }
+
+        cycle_mila=cycle_mila||g->contains_cycle(i,-1,g->visited);
+
+    }
+
+    if(cycle_mila){
+        cout<<"Cycle exists"<<endl;
+    }
+    else{
+        cout<<"Cycle does not exists"<<endl;
+    }
+}
