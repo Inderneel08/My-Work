@@ -1,0 +1,71 @@
+/// How to detect a cycle in an undirected graph using Breadth First Search.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+///#define INF 10000
+using namespace std;
+class Graph{
+public:
+    map<int,list<int> >adjlist;
+    
+    Graph()
+    {
+
+    }
+
+    void create_edges(int source,int destination)
+    {
+        adjlist[source].push_back(destination);
+        adjlist[destination].push_back(source);
+    }
+
+    bool is_connected_graph(int vertex)
+    {
+        map<int,bool> visited;
+        map<int,int> parent;
+        queue<int> temp;
+
+        temp.push(vertex);
+        visited[vertex]=true;
+        parent[vertex]=-1;
+
+        while(!temp.empty()){
+            int x=temp.front();
+            temp.pop();
+
+            for(auto i=adjlist[x].begin();i!=adjlist[x].end();i++){
+                if(visited[*i]==false){
+                    visited[*i]=true;
+                    parent[*i]=x;
+                    temp.push(*i);
+                }
+                else if(visited[*i]==true && parent[*i]!=x){
+                    return(true);
+                }
+            }
+        }
+        return(false);
+    }
+};
+int main()
+{
+    Graph*g=new Graph();
+    g->create_edges(0,1);
+    g->create_edges(0,2);
+    g->create_edges(0,3);
+    g->create_edges(3,4);
+
+    
+   bool r=false;
+
+   for(int i=0;i<5;i++){
+       r=((false)||(g->is_connected_graph(i)));
+   }
+
+   if(r==true){
+       cout<<"Cycle exists"<<endl;
+   }
+   else{
+       cout<<"Cycle does not exists"<<endl;
+   }
+}
