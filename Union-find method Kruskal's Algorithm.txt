@@ -1,0 +1,94 @@
+/// Kruskal's Algorithm using adjacency list and using union-find method.
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+class Graph{
+public:
+    ////set<int> not_visited;
+    ////set<int> visited;
+           /// Weight => (Source,Destination).
+    
+    vector<pair<int,pair<int,int> > >edges;
+    
+    int*parent;
+
+    Graph(int V)
+    {
+        parent=new int[V];
+        for(int i=0;i<V;i++){
+            parent[i]=-1;
+        }
+        
+    }
+
+    static bool sorting(pair<int,pair<int,int>>&a,pair<int,pair<int,int>>&b)
+    {
+        return(a.first<b.first);
+    }
+
+    void create_edges(int source,int destination,int weight)
+    {
+        pair<int,int>x(source,destination);
+        edges.push_back(pair<int,pair<int,int> >(weight,x));
+    }
+
+    void union_operation(int u,int v)
+    {
+        if(parent[v]==-1){
+            parent[u]=v;
+        }
+        else{
+            parent[u]=parent[v];
+        }
+    }
+
+    int find(int i)
+    {
+        if(parent[i]==-1){
+            return(i);
+        }
+
+        return(find(parent[i]));
+    }
+
+    void make_spanning_tree(void)
+    {
+        sort(edges.begin(),edges.end(),sorting);
+
+        vector<pair<int,pair<int,int> > >to_be_inserted;
+
+        for(int i=0;i<edges.size();i++){
+            /// Source.
+            int x=find(edges[i].second.first);
+            /// Destination.
+            int y=find(edges[i].second.second);
+
+            if(x!=y){
+                union_operation(x,y);
+                to_be_inserted.push_back(pair<int,pair<int,int> >(edges[i].first,edges[i].second));
+            }
+        }
+
+        cout<<"Weight:->"<<"Source"<<":"<<"Destination"<<endl;
+        for(int i=0;i<to_be_inserted.size();i++){
+            cout<<to_be_inserted[i].first<<":->"<<to_be_inserted[i].second.first<<":"<<to_be_inserted[i].second.second<<endl;
+        }
+    }
+};
+int main()
+{
+
+    Graph*g=new Graph(5);
+    g->create_edges(0,1,1);
+    g->create_edges(0,2,7);
+    g->create_edges(0,3,10);
+    g->create_edges(0,4,5);
+    g->create_edges(1,2,3);
+    g->create_edges(2,3,4);
+    g->create_edges(3,4,2);
+    g->make_spanning_tree();
+
+}
