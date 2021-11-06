@@ -1,52 +1,141 @@
-#include<iostream>
+/// Min-Heap using vector including heap sorting algorithm.
+#include<bits/stdc++.h>
 #include<cstdlib>
 #include<fstream>
 using namespace std;
-void swap_temp(int*a,int*b)
+
+void swap(int*a,int*b)
 {
-    int t=*a;
+    int temp=*a;
     *a=*b;
-    *b=t;
+    *b=temp;
 }
-void heapify(int*arr,int i,int n)
+
+void print_min_heap(vector<int>&heaptree)
 {
-    int left=2*i+1;
-    int right=2*i+2;
+    for(int i=0;i<heaptree.size();i++){
+        cout<<heaptree[i]<<" ";
+    }
+    cout<<endl;
+}
+
+void heapify_tree(vector<int>&heaptree,int i)
+{
+
+    int size=heaptree.size();
     int largest=i;
-    if((left<n)&&(arr[left]>arr[largest])){
-        largest=left;
+    int l=2*i+1;
+    int r=2*i+2;
+
+    if(l<size&&heaptree[l]<heaptree[largest]){
+        largest=l;
     }
-    if((right<n)&&(arr[right]>arr[largest])){
-        largest=right;
+    
+    if(r<size&&heaptree[r]<heaptree[largest]){
+        largest=r;
     }
+
     if(largest!=i){
-        swap_temp(&arr[i],&arr[largest]);
-        heapify(arr,largest,n);
+        swap(&heaptree[largest],&heaptree[i]);
+        heapify_tree(heaptree,i);
     }
+
 }
-void heap_sort(int*arr,int n)
+
+int pop_min_element(vector<int>&heaptree)
 {
-    for(int i=(n/2)-1;i>=0;i--){
-        heapify(arr,i,n);
+    int x=heaptree[0];
+    
+    swap(&heaptree[0],&heaptree[heaptree.size()-1]);
+    heaptree.pop_back();
+    int size=heaptree.size();
+
+    if(size>1){
+        for(int i=(size/2)-1;i>=0;i--){
+            heapify_tree(heaptree,i);
+        }
     }
-    for(int i=n-1;i>=0;i--){
-        swap_temp(&arr[i],&arr[0]);
-        heapify(arr,0,i);
+
+    return(x);
+}
+
+vector<int> heap_sorting(vector<int>&heaptree)
+{
+
+    vector<int> sorted_array;
+
+    while(!heaptree.empty()){
+        sorted_array.push_back(pop_min_element(heaptree));
+    }
+
+    return(sorted_array);
+
+}
+
+void delete_tree(int key,vector<int>&heaptree)
+{
+    for(int i=0;i<heaptree.size();i++){
+        if(key==heaptree[i]){
+            swap(&heaptree[i],&heaptree[heaptree.size()-1]);
+            break;
+        }
+    }
+    
+    heaptree.pop_back();
+    
+    int size=heaptree.size();
+    
+    if(size>1){
+        for(int i=(size/2)-1;i>=0;i--){
+            heapify_tree(heaptree,i);
+        }
     }
 }
+
+void insert_tree(vector<int>&heaptree,int element)
+{
+
+    if(heaptree.size()==0){
+        heaptree.push_back(element);
+    }
+
+    else{
+        heaptree.push_back(element);
+        int size=heaptree.size();
+        for(int i=(size/2)-1;i>=0;i--){
+            heapify_tree(heaptree,i);
+        }
+    }
+}
+
 int main()
 {
-    int n;
-    cout<<"Enter the size of the array:"<<endl;
-    cin>>n;
-    int*arr=new int[n];
-    cout<<"Enter the elements to be entered in the array:"<<endl;
-    for(int i=0;i<n;i++){
-        cin>>arr[i];
-    }
-    heap_sort(arr,n);
-    for(int i=0;i<n;i++){
-        cout<<arr[i]<<" ";
-    }
+    vector<int> heaptree;
+    insert_tree(heaptree,3);
+    insert_tree(heaptree,4);
+    insert_tree(heaptree,9);
+    insert_tree(heaptree,5);
+    insert_tree(heaptree,2);
+    insert_tree(heaptree,8);
+    cout<<"Min heap of the tree is:"<<endl;
+    print_min_heap(heaptree);
+    /*
+    delete_tree(3,heaptree);
+    print_min_heap(heaptree);
+    delete_tree(4,heaptree);
+    print_min_heap(heaptree);
+    delete_tree(5,heaptree);
+    print_min_heap(heaptree);
+    delete_tree(8,heaptree);
+    print_min_heap(heaptree);
+    delete_tree(9,heaptree);
+    print_min_heap(heaptree);
+    cout<<endl;
+    */
+   cout<<"Sorted array:"<<endl;
+
+   heaptree=heap_sorting(heaptree);
+   print_min_heap(heaptree);
+
 }
 	
