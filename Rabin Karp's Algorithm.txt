@@ -1,0 +1,90 @@
+/// Rabin karp's algorithm for string matching.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+unordered_map<char,int> temp;
+
+int generate_hash_code(char*pat)
+{
+    int sum=0;
+    int num=1;
+
+    for(char ch='A';ch<='Z';ch++){
+        temp[ch]=num;
+        num++;
+    }
+
+    for(int i=0;i<strlen(pat);i++){
+        sum+=temp[pat[i]];
+    }
+
+    return(sum);
+}
+
+int get_sum_temp(char*text,char*pattern,int index,int sum,int previous)  /// n=> Length of pattern m=> Length of text
+{
+    
+    if(sum==0){
+        for(int i=index;i<index+strlen(pattern);i++){
+            sum+=temp[text[i]];
+        }
+    }
+    
+    else{
+        sum-=temp[text[previous]];
+        sum+=temp[text[index+strlen(pattern)-1]];
+    }
+
+    return(sum);
+
+}
+
+bool check_if_pattern_present(char*pat,char*txt,int index)
+{
+
+    int j=index;
+
+    for(int i=0;i<strlen(pat);i++){
+        if(pat[i]!=txt[j]){
+            return(false);
+        }
+        j++;
+    }
+    
+    return(true);
+
+}
+
+void find_pattern_index(char*pat,char*text)
+{
+    int n=strlen(pat); /// length of pattern string.
+    int m=strlen(text); /// length of text string.
+
+    int sum=generate_hash_code(pat);
+    int get_sum=0;
+
+    for(int i=0;i<m;i++){
+
+        get_sum=get_sum_temp(text,pat,i,get_sum,i-1);
+
+        if(get_sum==sum){
+            if(check_if_pattern_present(pat,text,i)){
+                cout<<"Pattern found at index:"<<i<<endl;
+            }
+        }
+
+    }
+}
+
+int main()
+{
+    char text[]="AAAAAAAAAAAAAAAAAB";
+    char pattern[]="AAAAB";
+
+    int pattern_hash_code=generate_hash_code(pattern);
+
+    find_pattern_index(pattern,text);
+}
+
