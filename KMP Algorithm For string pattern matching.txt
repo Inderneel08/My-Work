@@ -1,0 +1,79 @@
+/// KMP Knuth Morris Pratt algorithm for pattern searching.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+void found_pattern_at_index(char*pattern,char*text,int*lps)
+{
+    int n=strlen(pattern);
+    int m=strlen(text);
+
+    int i=0;
+    int j=0;
+
+    while(i<m){
+        
+        if(pattern[j]==text[i]){
+            j++;
+            i++;
+        }
+
+        if(j==n){
+            cout<<"Pattern found at index:"<<i-j<<endl;
+            j=lps[j-1];
+        }
+
+        else if(pattern[j]!=text[i]){
+            if(j!=0){
+                j=lps[j-1];
+            }
+            else{
+                i++;
+            }
+        }
+
+    }
+}
+
+
+int main()
+{
+    char text[]="ababcabcabababd";///
+    char pattern[]="ababd";/// n-2==4
+
+    int n=sizeof(pattern)/sizeof(pattern[0]);
+    int m=sizeof(text)/sizeof(text[0]);
+    
+
+    int lps[n-1];
+    //// Creating the lps array.
+
+    for(int i=0;i<n-1;i++){
+        if(i==0){
+            lps[i]=0;
+        }
+        else{
+            if(pattern[i]==pattern[i-1]){
+                lps[i]=lps[i-1]+1;
+            }
+            else{
+                int x=0;
+                for(int j=i-1;j>=0;j--){
+                    if(pattern[i]==pattern[j]){
+                        x=1;
+                        lps[i]=j+1;
+                        break;
+                    }
+                }
+                if(x==0){
+                    lps[i]=0;
+                }
+            }
+        }
+    }
+    //// 00120 is the lps array.
+
+   found_pattern_at_index(pattern,text,lps);
+}
+
