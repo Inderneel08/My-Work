@@ -1,0 +1,169 @@
+    /// /// 8 queens problem naive approach.
+    #include<bits/stdc++.h>
+    #include<cstdlib>
+    #include<fstream>
+    using namespace std;
+    
+    void print_solution(char**board,int n)
+    {
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<board[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+    
+    bool check_through_positions(char**board,int row,int col,int n)
+    {
+        //// Checking for the same row so the row remains same and column changes.
+    
+        for(int i=0;i<col;i++){
+            if(board[row][i]=='Q'){
+                return(false);
+            }
+        }
+    
+        for(int i=col+1;i<n;i++){
+            if(board[row][i]=='Q'){
+                return(false);
+            }
+        }
+    
+        //// Checking for the same col so the row changes  and column remains same.
+    
+        for(int i=0;i<row;i++){
+            if(board[i][col]=='Q'){
+                return(false);
+            }
+        }
+    
+        for(int i=row+1;i<n;i++){
+            if(board[i][col]=='Q'){
+                return(false);
+            }
+        }
+    
+        //// Checking the upper diagnal on the left side.
+        int i=row-1;
+        int j=col-1;
+    
+        for(;i>=0&&j>=0;i--,j--){
+            if(board[i][j]=='Q'){
+                return(false);
+            }
+        }
+    
+        //// Checking the lower diagnal on the left side.
+        i=row+1;
+        j=col-1;
+    
+        for(;i<n&&j>=0;i++,j--){
+            if(board[i][j]=='Q'){
+                return(false);
+            }
+        }
+        /// Checking the upper diagnal on the right side.
+        i=row-1;
+        j=col+1;
+    
+        for(;i>=0&&j<n;i--,j++){
+            if(board[i][j]=='Q'){
+                return(false);
+            }
+        }
+    
+        /// Checking the lower diagnal on the right side.
+        i=row+1;
+        j=row+1;
+    
+        for(;i<n&&j<n;i++,j++){
+            if(board[i][j]=='Q'){
+                return(false);
+            }
+        }
+        
+        return(true);
+    }
+    
+    bool if_queens_are_safe(char**board,int n)
+    {
+    
+        int row,col;
+        bool factor=true;
+    
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='Q'){
+                    row=i;
+                    col=j;
+                    if(check_through_positions(board,row,col,n)==false){
+                        factor=false;
+                        break;
+                    }
+                    else{
+                        factor=true;
+                    }
+                }
+            }
+            if(factor==false){
+                break;
+            }
+        }
+    
+        return(factor);
+    
+    }
+    
+    int main()
+    {
+        char**board=new char*[8];
+        for(int i=0;i<8;i++){
+            board[i]=new char[8];
+        }
+    
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                board[i][j]='0';
+            }
+        }
+        
+        /// /// print_solution(board,8);
+    
+        for(int i=0;i<8;i++){
+            board[i][0]='Q';
+            for(int j=0;j<8;j++){
+                board[j][1]='Q';
+                for(int k=0;k<8;k++){
+                    board[k][2]='Q';
+                    for(int l=0;l<8;l++){
+                        board[l][3]='Q';
+                        for(int m=0;m<8;m++){
+                            board[m][4]='Q';
+                            for(int n=0;n<8;n++){
+                                board[n][5]='Q';
+                                for(int o=0;o<8;o++){
+                                    board[o][6]='Q';
+                                    for(int p=0;p<8;p++){
+                                        board[p][7]='Q';
+                                        if(if_queens_are_safe(board,8)==true){
+                                            print_solution(board,8);
+                                            cout<<endl;
+                                        }
+                                        board[p][7]='0';
+                                    }
+                                    board[o][6]='0';
+                                }
+                                board[n][5]='0';
+                            }
+                            board[m][4]='0';
+                        }
+                        board[l][3]='0';
+                    }
+                    board[k][2]='0';
+                }
+                board[j][1]='0';
+            }
+            board[i][0]='0';
+        }
+    }
