@@ -1,71 +1,100 @@
+/// N queen problem.
 #include<bits/stdc++.h>
 #include<cstdlib>
 #include<fstream>
 using namespace std;
-int n=20;
-void print_solution(int**arr)
+vector<vector<int> >result;
+int ct=0;
+bool issafe(char**board,int row,int col,int n)
 {
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            cout<<arr[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-}
-bool check_condition(int**arr,int row,int col)
-{
+    /// Check this row on the left side.
     int i,j;
+
     for(i=0;i<col;i++){
-        if(arr[row][i]){
+        if(board[row][i]=='Q'){
             return(false);
         }
     }
+
     for(i=row,j=col;i>=0&&j>=0;i--,j--){
-        if(arr[i][j]){
+        if(board[i][j]=='Q'){
             return(false);
         }
     }
+
     for(i=row,j=col;i<n&&j>=0;i++,j--){
-        if(arr[i][j]){
+        if(board[i][j]=='Q'){
             return(false);
         }
     }
+
     return(true);
 }
-bool solve_N_queen(int**arr,int col)
+
+bool solveNQUtil(char**board,int col,int n)
 {
-    if(col>=n){
-        return(true);
-    }
-    else{
+    if(col==n){
+        ct++;
+        vector<int> v;
         for(int i=0;i<n;i++){
-            if(check_condition(arr,i,col)){
-                arr[i][col]=1;
-                if(solve_N_queen(arr,col+1)){
-                    return(true);
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='Q'){
+                    v.push_back(j);
                 }
-                ///Backtrack.
-                arr[i][col]=0;
             }
         }
-        return(false);
+        result.push_back(v);
+        v.clear();
+        return(true);
     }
-}
-int main()
-{
-    int**Nqueen=new int*[n];
+    
+    bool res=false;
+
     for(int i=0;i<n;i++){
-        Nqueen[i]=new int[n];
-    }
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            Nqueen[i][j]=0;
+        if(issafe(board,i,col,n)){
+            board[i][col]='Q';
+            res=solveNQUtil(board,col+1,n)||res;
+            board[i][col]='0';
         }
     }
-    if(solve_N_queen(Nqueen,0)){
-        print_solution(Nqueen);
+
+    return(res);
+}
+
+bool nqueen(char**board,int n)
+{
+    return(solveNQUtil(board,0,n));
+}
+
+int main()
+{
+    int n;
+    cin>>n; ///Enter the size of the board.
+    char**board=new char*[n];
+
+    for(int i=0;i<n;i++){
+        board[i]=new char[n];
     }
-    else{
-        cout<<"Solution does not exist"<<endl;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            board[i][j]='0';
+        }
     }
+
+    nqueen(board,n);
+    
+    cout<<"Total solutions:"<<endl;
+
+    for(int i=0;i<result.size();i++){
+        vector<int> v = result[i];
+
+        for(vector<int>::iterator it=v.begin();it!=v.end();it++){
+            cout<<*it<<" ";
+        }
+        cout<<endl;
+        cout<<endl;
+    }
+
+    cout<<"Number of solutions:"<<ct<<endl;
 }
