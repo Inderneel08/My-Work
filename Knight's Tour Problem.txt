@@ -74,6 +74,7 @@ public:
         return(false);
     }
 };
+
 int main()
 {
     int n=8; //// size of the board.
@@ -88,7 +89,9 @@ int main()
 
     t.initialize_board(n,board);
 
-    t.istracking(board,0,0,n);
+    if(t.istracking(board,0,0,n)==false){
+      cout<<"Solution does not exists:"<<endl;
+    }
 
 }
 
