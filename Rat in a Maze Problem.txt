@@ -1,108 +1,108 @@
+/// Rat in a maze problem.
+
+/*
+Rat begins to start it's motion from the source that is (0,0) and goes to the destination that is (N-1,N-1). 
+The rat moves in two directions forward and down. That means no diagnal movement by the rat. Only ((i+1),j) and
+(i,(j+1)).
+*/
+
 #include<bits/stdc++.h>
 #include<cstdlib>
 #include<fstream>
 using namespace std;
-int n=4;
-pair<int,int> source={0,0};
-pair<int,int> destination={n-1,n-1};
-bool check_position(int maze_matrix[][4],int row,int col)
+
+void print_solution(int**arr,bool**visited,int n)
 {
-    if(maze_matrix[row][col]==0){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            arr[i][j]=0;
+            if(visited[i][j]==true){
+                arr[i][j]=1;
+            }
+        }
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cout<<arr[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+bool check_positions(int n,int source_x,int source_y,int**arr,bool**visited)
+{
+    if(source_x>=n||source_y>=n||arr[source_x][source_y]==0){
         return(false);
     }
-    else{
+
+    return(true);
+}
+
+bool find_pattern(int**arr,bool**visited,int n,int source_x,int source_y)
+{
+    /// Source x, Source y =>(0,0).
+    if((source_x==n-1)&&(source_y==n-1)){
+        visited[source_x][source_y]=true;
+        print_solution(arr,visited,n);
         return(true);
     }
-}
-bool solution_solve(int maze_matrix[][4])
-{
-    static pair<int,int> position=source;
-    if(position==destination){
-        return(true);
-    }
     else{
-        if(check_position(maze_matrix,position.first,position.second)){
-            if(check_position(maze_matrix,position.first+1,position.second)){
-                position.first+=1;
-                position.second=position.second;
+        if(check_positions(n,source_x,source_y,arr,visited)){
+            visited[source_x][source_y]=true;
+            if(find_pattern(arr,visited,n,source_x+1,source_y)){
                 return(true);
             }
-            if(check_position(maze_matrix,position.first,position.second+1)){
-                position.second+=1;
-                position.first=position.first;
+            if(find_pattern(arr,visited,n,source_x,source_y+1)){
                 return(true);
             }
-            if(check_position(maze_matrix,position.first+1,position.second)==false){
-                position.first=position.first-1;
-                return(false);
-            }
-            if(check_position(maze_matrix,position.first,position.second+1==false)){
-                position.second=position.second-1;
-                return(false);
-            }
+            visited[source_x][source_y]=false;
+            return(false);
         }
     }
+    return(false);
 }
+
 int main()
 {
-    int maze_matrix[4][4]={{1,0,0,0},{1,1,0,1},{0,1,0,0},{1,1,1,1}};
-    if(solution_solve(maze_matrix)){
-        cout<<"Pattern found"<<endl;
+    int n=4;
+    int**arr=new int*[n];
+    bool**visited=new bool*[n];
+    
+    for(int i=0;i<n;i++){
+        arr[i]=new int[n];
+        visited[i]=new bool[n];
+    }
+    
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            arr[i][j]=0;
+            visited[i][j]=false;
+        }
+    }
+
+    arr[0][0]=1;
+    arr[0][1]=1;
+    arr[0][2]=1;
+    arr[0][3]=1;
+    arr[1][0]=0;
+    arr[1][1]=0;
+    arr[1][2]=1;
+    arr[1][3]=1;
+    arr[2][0]=1;
+    arr[2][1]=1;
+    arr[2][2]=0;
+    arr[2][3]=1;
+    arr[3][0]=0;
+    arr[3][1]=0;
+    arr[3][2]=0;
+    arr[3][3]=1;
+
+    if(find_pattern(arr,visited,n,0,0)){
+        cout<<"The above matrix represents the solution:"<<endl;
     }
     else{
-        cout<<"Pattern not found"<<endl;
+        cout<<"The solution does not exists:"<<endl;
     }
-}
 
-//// Count number of paths.
-
-
-#include<bits/stdc++.h>
-#include<cstdlib>
-#include<fstream>
-#define R 4
-#define C 4
-using namespace std;
-pair<int,int> source={0,0};
-pair<int,int> destination={R-1,C-1};
-int count_paths(int matrix[][C])
-{
-    if(matrix[0][0]==-1){
-        return(0);
-    }
-    for(int i=0;i<R;i++){
-        if(matrix[0][i]==0){
-            matrix[0][i]=1;
-        }
-        else{
-            break;
-        }
-    }
-    for(int i=1;i<C;i++){
-        if(matrix[i][0]==0){
-            matrix[i][0]=1;
-        }
-        else{
-            break;
-        }
-    }
-    for(int i=1;i<R;i++){
-        for(int j=1;j<C;j++){
-            if(matrix[i][j]==-1){
-                continue;
-            }
-            if(matrix[i-1][j]>0){
-                matrix[i][j]+=matrix[i-1][j];
-            }
-            if(matrix[i][j-1]>0){
-                matrix[i][j]+=matrix[i][j-1];
-            }
-        }
-    }
-    return((matrix[R-1][C-1]>0)?matrix[R-1][C-1]:0);
-}
-int main()
-{
-    int maze[R][C]={{0,0,0,0},{0,-1,0,0},{-1,0,0,0},{0,0,0,0}};
-    cout<<count_paths(maze)<<endl;
 }
