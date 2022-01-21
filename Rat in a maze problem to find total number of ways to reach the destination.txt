@@ -1,0 +1,75 @@
+////// Rat in a maze problem to find total number of ways to reach the destination.
+
+/*
+Rat begins to start it's motion from the source that is (0,0) and goes to the destination that is (N-1,N-1).
+The rat moves in two directions forward and down. That means no diagnal movement by the rat. Only ((i+1),j) and
+(i,(j+1)).
+*/
+
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+int ct=0;
+
+bool check_solutions(int x,int y,int**arr,int n)
+{
+    if(arr[x][y]==0||x>=n||y>=n){
+        return(false);
+    }
+
+    return(true);
+}
+
+void find_paths(int**arr,int x,int y,int n)
+{
+    if((x==n-1)&&(y==n-1)){
+        cout<<"x= "<<x<<" y= "<<y<<endl;
+        ct++;
+    }
+    else{
+
+        if(check_solutions(x,y,arr,n)){
+            cout<<"x= "<<x<<" y= "<<y<<endl;
+            find_paths(arr,x+1,y,n);
+            find_paths(arr,x,y+1,n);
+        }
+
+    }
+}
+
+int main()
+{
+    int n=4;
+    int**arr=new int*[n];
+    for(int i=0;i<n;i++){
+        arr[i]=new int[n];
+    }
+
+    arr[0][0]=1;
+    arr[0][1]=1;
+    arr[0][2]=1;
+    arr[0][3]=1;
+    arr[1][0]=0;
+    arr[1][1]=0;
+    arr[1][2]=1;
+    arr[1][3]=1;
+    arr[2][0]=1;
+    arr[2][1]=1;
+    arr[2][2]=0;
+    arr[2][3]=1;
+    arr[3][0]=0;
+    arr[3][1]=0;
+    arr[3][2]=0;
+    arr[3][3]=1;
+    
+   find_paths(arr,0,0,n);
+
+   cout<<endl;
+   cout<<"Total number of solutions are:"<<ct<<endl;
+
+}
+
+
+
+
