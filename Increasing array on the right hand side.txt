@@ -1,0 +1,51 @@
+//// Increasing array on the right hand side.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+void max_temp(int*arr,int*n,int element)
+{
+    int index=0;
+
+    for(int i=0;i<*n;i++){
+        if(arr[i]>element){
+            index=i-1;
+            break;
+        }
+    }
+    *n=*n+1;
+
+    int i=*n-1;
+    
+    for(;i>=index+1;i--){
+        arr[i]=arr[i-1];
+    }
+    i++;
+    arr[i]=element;
+}
+
+int main()
+{
+    int n=10;
+    int*arr=new int[n];
+    arr[0]=1;
+    arr[1]=10;
+    arr[2]=20;
+    arr[3]=30;
+    arr[4]=40;
+    arr[5]=50;
+    arr[6]=60;
+    arr[7]=70;
+    arr[8]=80;
+    arr[9]=90;
+
+    int number_to_be_inserted;
+    cin>>number_to_be_inserted;
+
+    max_temp(arr,&n,number_to_be_inserted);
+
+    for(int i=0;i<n;i++){
+        cout<<arr[i]<<" ";
+    }
+}
