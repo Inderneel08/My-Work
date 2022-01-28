@@ -1,0 +1,105 @@
+/// Hamiltonian cycle in a graph using adjacency list.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+struct Edge{
+    int src,dest;
+};
+
+class Graph{
+public:
+    vector<vector<int> > paths;
+    vector<int>*adjlist;
+
+    Graph(vector<Edge>&edges,int n)
+    {
+        adjlist=new vector<int>[n];
+
+        for(Edge edge:edges){
+            int src=edge.src;
+            int dest=edge.dest;
+
+            adjlist[src].push_back(dest);
+            adjlist[dest].push_back(src);
+        }
+    }
+
+    void print_paths(void)
+    {
+        for(int i=0;i<paths.size();i++){
+            vector<int> temp=paths[i];
+
+            for(int j=0;j<temp.size();j++){
+                cout<<temp[j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+
+    void create_path(int insert_vertex,vector<bool>&visited,vector<int>&path,int number)
+    {
+        if(path.size()==number){
+            paths.push_back(path);
+            return;
+        }
+
+        for(vector<int>::iterator it=adjlist[insert_vertex].begin();it!=adjlist[insert_vertex].end();it++){
+            if(visited[*it]==false){
+                visited[*it]=true;
+                path.push_back(*it);
+                
+                create_path(*it,visited,path,number);
+
+                /// backtrack.
+                visited[*it]=false;
+                path.pop_back();
+            }
+        }
+
+    }
+
+    void construct_hamiltonian(int number_vertices)
+    {
+        for(int i=0;i<number_vertices;i++){
+            vector<int> path;
+            vector<bool> visited(number_vertices,false);
+            path.push_back(i);
+            visited[i]=true;
+            create_path(i,visited,path,number_vertices);
+        }
+    }
+
+};
+
+int main()
+{
+    vector<Edge> edges;
+    int number_edges,number_vertices;
+
+    cout<<"Enter the number of vertices:"<<endl;
+    cin>>number_vertices;
+    cout<<"Enter the number of edges:"<<endl;
+    cin>>number_edges;
+
+    for(int i=0;i<number_edges;i++){
+        int x,y;
+        cin>>x>>y;
+        edges.push_back({x,y});
+    }
+
+    Graph graph(edges,number_vertices);
+    graph.construct_hamiltonian(number_vertices);
+    cout<<endl;
+    cout<<"The paths are:"<<endl;
+    cout<<endl;
+    graph.print_paths();
+
+}
+
+
+
+
+
+
+
