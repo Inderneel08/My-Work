@@ -1,0 +1,33 @@
+/// Brute force approach using recursion.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+int find_knapsack_cost(int W,int values[],int weights[],int n)
+{
+    if(W==0||n==0){
+        return(0);
+    }
+
+    if(weights[n]<=W){
+        return(max((values[n]+find_knapsack_cost(W-weights[n],values,weights,n-1)),(find_knapsack_cost(W,values,weights,n-1))));
+    }
+
+    return(find_knapsack_cost(W,values,weights,n-1));
+}
+
+int main()
+{
+    int knapsack_capacity=40;
+
+    int values[]={10,20,30,40};
+
+    int weights[]={30,10,40,20};
+
+    int n=4;
+
+    cout<<"The value of the profit is: "<<find_knapsack_cost(knapsack_capacity,values,weights,n-1)<<endl;
+}
+
+
