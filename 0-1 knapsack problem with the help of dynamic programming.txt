@@ -1,0 +1,91 @@
+/// 0/1 knapsack problem with the help of dynamic programming.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+bool check_row(int**matrix,int row,int m,int x)
+{
+    for(int i=0;i<m;i++){
+        if(matrix[row][i]==x){
+            return(true);
+        }
+    }
+
+    return(false);
+}
+
+void fill_values(vector<bool>&visited,int**matrix,int n,int m,int w[],int weight)
+{
+    while(weight>0){
+
+        int x=matrix[n][m];
+        
+        if(check_row(matrix,n-1,m,x)){
+            n--;
+        }
+        else{
+            if(weight-w[n-1]>=0){
+                visited[n-1]=true;
+                weight=weight-w[n-1];
+            }
+            n--;
+        }
+    }
+}
+
+void knapsack_matrix(int**matrix,int p[],int w[],int n,int m)
+{
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(i==0||j==0){
+                matrix[i][j]=0;
+            }
+            else{
+                if(j<w[i-1]){
+                    matrix[i][j]=matrix[i-1][j];
+                }
+                else{
+                    matrix[i][j]=max(matrix[i-1][j],matrix[i-1][j-w[i-1]]+p[i-1]);
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    int p[]={1,2,5,6};
+    
+    int w[]={2,3,4,5};
+
+    int n=4;
+
+    int knapsack_weight=8;
+
+    vector<bool> visited(n,false);
+
+    for(int i=0;i<n;i++){
+        visited[i]=false;
+    }
+
+    int **matrix=new int*[n+1];
+
+    for(int i=0;i<n+1;i++){
+        matrix[i]=new int[knapsack_weight+1];
+    }
+    
+    knapsack_matrix(matrix,p,w,n+1,knapsack_weight+1);
+
+    cout<<"Profit is :"<<matrix[n][knapsack_weight]<<endl;
+
+    fill_values(visited,matrix,n,knapsack_weight,w,knapsack_weight);
+
+    cout<<"Solution is :";
+
+    for(int i=0;i<n;i++){
+        cout<<visited[i]<<" ";
+    }
+
+    cout<<endl;
+}
