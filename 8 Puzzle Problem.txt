@@ -1,0 +1,152 @@
+/// 8 puzzle problem.
+#include<bits/stdc++.h>
+#include<cstdlib>
+#include<fstream>
+using namespace std;
+
+set<vector<vector<char> > > visited;
+
+bool is_check_soln(int x,int y,int n)
+{
+    if(x==-1||y==-1||x==n||y==n){
+        return(false);
+    }
+
+    return(true);
+}
+
+void swapping(vector<vector<char> >&start,int x1,int y1,int x2,int y2)
+{
+    char temp=start[x1][y1];
+
+    start[x1][y1]=start[x2][y2];
+
+    start[x2][y2]=temp;
+}
+
+void backtrack_soln(vector<vector<char> >start,vector<vector<char> >goal,int n,int x,int y)
+{
+
+    if(start==goal){
+        cout<<"Reached"<<endl;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cout<<start[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+        exit(0);
+    }
+
+    visited.insert(start);
+
+    vector<vector<char> >constant(start);
+
+    if(is_check_soln(x-1,y,n)){
+        swapping(start,x,y,x-1,y);
+
+        if(visited.find(start)!=visited.end()){
+        ///    cout<<"0"<<endl;
+            swapping(start,x-1,y,x,y);
+        }
+        else{
+           /// cout<<"1"<<endl;
+            backtrack_soln(start,goal,n,x-1,y);
+        }
+    }
+
+    start=constant;
+
+    if(is_check_soln(x,y-1,n)){
+        swapping(start,x,y,x,y-1);
+
+        if(visited.find(start)!=visited.end()){
+            ///cout<<"0"<<endl;
+            swapping(start,x,y-1,x,y);
+        }
+        else{
+            ///cout<<"1"<<endl;
+            backtrack_soln(start,goal,n,x,y-1);
+        }
+    }
+
+    start=constant;
+
+    if(is_check_soln(x+1,y,n)){
+        swapping(start,x,y,x+1,y);
+
+        if(visited.find(start)!=visited.end()){
+            ///cout<<"0"<<endl;
+            swapping(start,x+1,y,x,y);
+        }
+        else{
+            ///cout<<"1"<<endl;
+            backtrack_soln(start,goal,n,x+1,y);
+        }
+    }
+
+    start=constant;
+
+    if(is_check_soln(x,y+1,n)){
+        swapping(start,x,y,x,y+1);
+
+        if(visited.find(start)!=visited.end()){
+            ///cout<<"0"<<endl;
+            swapping(start,x,y+1,x,y);
+        }
+        else{
+            ///cout<<"1"<<endl;
+            backtrack_soln(start,goal,n,x,y+1);
+        }
+    }
+
+}
+
+int main()
+{
+    int n=3;
+
+    vector<vector<char> > start;
+
+    vector<vector<char> > goal;
+
+    start.push_back(vector<char>{'2','q','3'});
+
+    start.push_back(vector<char>{'1','7','6'});
+
+    start.push_back(vector<char>{'4','5','8'});
+
+    goal.push_back(vector<char>{'1','2','3'});
+
+    goal.push_back(vector<char>{'4','5','6'});
+
+    goal.push_back(vector<char>{'7','8','q'});
+
+    int x=0;
+
+    int y=0;
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(start[i][j]=='q'){
+                x=i;
+                y=j;
+                break;
+            }
+        }
+    }
+
+    backtrack_soln(start,goal,n,x,y);
+}
+
+
+
+
+
+
+
+
+
+
+
+
